@@ -1,0 +1,107 @@
+{{template "partials/admin-header" .}}
+<style>
+  .img-icon { width: 40px;margin-right: 10px;}
+  </style>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+       
+        <div class="card-body">
+          <div class="row">
+              <div class="col-lg-8">
+                  <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> Volt Account List</span></h4>
+                  {{ if .ID }}
+                  <span><strong>Volt Name:</strong> {{.Name}} - {{.ID}}</span>
+                  {{end}}
+              </div>
+              <div class="col-lg-4 text-end my-2"> {{ if .ID }}<a href="/generate-new-wallet-address/{{.ID}}/" title="Request Wallet Address" class="btn btn-sm btn-outline-primary template"> Request Wallet Address</a>{{end}}</div>
+        </div>
+      </div>
+      
+      
+
+      {{if .Alert}}
+      <div class="alert alert-warning alert-dismissible fade show mx-2" role="alert">
+        <strong>{{.Alert}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {{end}}
+
+      <div class="accordion m-2" id="accordionExample">
+        {{range .Data}}
+        {{ $dataContext := . }}
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{.ID}}" aria-expanded="false" aria-controls="collapse{{.ID}}">
+              {{.ID}} - {{.Name}}
+            </button>
+          </h2>
+         
+          <div id="collapse{{$dataContext.ID}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body row">
+              {{range $dataContext.Assets}}
+              <div class="col-sm-6">
+                <div class="card changeiban" data-iban="1">
+                  <div class="card-body bg-primary-subtle">
+                    <div class="media">
+                      <div class="media-body">
+                        <h5>ID {{.ID}}</h5>
+                      </div>
+                      <div class="avatar-xs"> <img class="img-icon" src="/views/uploads/{{.ID}}.png"> </div>
+                    </div>
+                    <h4 class="m-0 align-self-center"> {{.Balance}} {{.ID}}</h4>
+                  </div>
+                </div>
+              </div>
+
+              
+              {{end}}
+            </div>
+          </div>
+         
+        </div>
+        {{end}}
+        
+        
+      </div>
+     
+          <!-- <div class="table-responsive mx-2">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">COIN</th>
+                  <th scope="col">BALANCE</th>
+                  <th scope="col">WALLET ADDRESS</th>
+                  <th scope="col">NETWORK</th>
+                </tr>
+              </thead>
+              <tbody id="none"> 
+                  {{range .Data}}
+                <tr>
+                  <td>{{.ID}} - {{.Name}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                    {{range .Assets}}
+                    <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Balance}}</td>
+                    <td>{{.Available}}</td>
+                    <td>{{.Pending}}</td>
+                    </tr>
+                    {{end}}
+                {{end}}
+              </tbody>
+            </table>
+          </div> -->
+        
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+  {{template "partials/admin-footer" .}}

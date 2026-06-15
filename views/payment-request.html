@@ -1,0 +1,108 @@
+{{template "partials/header" .}}
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{ .Title }} </h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <a href="/" class="d-flex align-items-center gap-1 hover-text-primary">
+      <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+      {{ .Title }}
+    </a>
+  </li>
+  <li>-</li>
+  <li class="fw-medium">{{ .Subtitle }}</li>
+</ul>
+ 
+</div>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="my-1">
+            {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}} 
+            <div class="row gy-4 mt-4">
+
+              <div class="col-xxl-6">
+                <div class="col-12">
+                  <div class="card h-100">
+                    <div class="card-body p-24">
+                      <div class="tab-content" id="pills-tabContent">
+                          <div class="tab-pane fade show active" id="pills-Buy" role="tabpanel" aria-labelledby="pills-Buy-tab" tabindex="0">
+                            <form method="POST" id="paymentForm" action="/paymentRequestPost" autocomplete="off">
+                              <div class="mb-20">  
+                                  <label for="sender_name" class="fw-semibold mb-8 text-primary-light">Full Name</label>
+                                  <div class="input-group input-group-lg border input-form-light radius-8">
+                                      <input type="text" class="form-control bg-base border-0 radius-8" id="sender_name" name="sender_name" placeholder="Full Name" required>
+                                      
+                                  </div>
+                              </div>
+                              <div class="mb-20">  
+                                  <label for="sender_email" class="fw-semibold mb-8 text-primary-light">Email</label>
+                                  <div class="input-group input-group-lg border input-form-light radius-8">
+                                      <input type="text" class="form-control bg-base border-0 radius-8" name="sender_email" id="sender_email" placeholder="Email" required>
+                                      
+                                  </div>
+                              </div>
+                              <div class="mb-20">  
+                                <label for="price_amount" class="fw-semibold mb-8 text-primary-light">Fiat Amount</label>
+                                <div class="input-group input-group-lg border input-form-light radius-8">
+                                    <input  class="form-control bg-base border-0 radius-8" id="price_amount" name="price_amount" type="number" min="0.01" max="10000000" step="0.01" placeholder="Fiat Amount" required>
+                                    <div class="input-group-text bg-neutral-50 border-0 fw-normal text-md ps-1 pe-1">
+                                        <select class="form-select form-select-sm w-auto bg-transparent fw-bolder border-0 text-secondary-light" name="price_currency" id="price_currency" title="Fiat Currency" required="">
+                                          <!-- <option value="" >Select</option> -->
+                                          {{range .CurrencyList}}
+                                          <option value="{{.Currency_code}}" >{{.Currency_code}}</option>
+                                          {{end}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                              <div class="mb-20">  
+                                  <label class="fw-semibold mb-8 text-primary-light">Description</label>
+                                  <textarea class="form-control bg-base h-80-px radius-8" name="order_description" id="order_description" placeholder="Description"></textarea>
+                              </div>
+                              <div class="mb-2">  
+                                <button type="submit" id="submit" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8"> Send Now</button>
+                            </div>
+                          </form>
+                          </div>
+                         
+                      </div>
+                      
+                  </div>
+                </div>
+               </div>
+              </div>
+              <div class="col-xxl-6">
+                <div class="" id="forgotModal" tabindex="-1" aria-hidden="true">
+                  <div class="">
+                      <div class="modal-content radius-16 bg-base">
+                      <div class="modal-body p-40 text-center">
+                          <div class="mb-32">
+                              <img src="/assets/images/auth/envelop-icon.png" alt="">
+                          </div>
+                          <h6 class="mb-12">Send Payment Request at Email</h6>
+                          <p class="text-secondary-light text-sm mb-0">after submit details your payment request sent at submitted email id </p>
+                          
+                      </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+  {{template "partials/footer" .}}
+
+

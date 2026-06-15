@@ -1,0 +1,58 @@
+
+{{template "partials/support-files-admin" .}}
+  <link href="{{.CssURLS}}/assets/css/form-bg.css" rel="stylesheet">
+  <div class="container"><img class="background" src="/views/images/admin-bg2.png"/>
+    <!-- <p class="message"> Crypto Payment</p> -->
+    
+  <div class="account-pages">
+    
+      <!-- end row -->
+      <div class="row justify-content-center text-white">
+        <div class="col-lg-12 box position-absolute">
+      <div class="text-center text-white my-2 "><img src="{{.LogoDark}}" alt="Logo" class="img-fluid " style="max-height: 50px !important;"></div>
+          <div class="card form bg-transparent shadow" >
+            <div class="card-body">
+              <h1 class="mb-2 text-center"> Sign in </h1>
+        {{if .AlertX}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>{{.AlertX}}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{end}}
+                      
+                        <form method="post"  action="/admin/adminLoginPost" class="form-horizontal mt-3">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12  my-1">
+                      <label for="adminId">Enter registered email id</label>
+                        <input type="email" class="form-control username" id="admin-username" name="admin-username" placeholder="Your Username" value="admin@itio.in"  autocomplete="off" required>
+                        
+                      
+                    </div>
+                    <div class="col-md-12 my-1">
+                      <label for="userpassword">Enter password</label>
+                        <input type="password" class="form-control password" id="admin-password" name="admin-password" value="Dollar@123#" placeholder="Enter password"  required  autocomplete="off" >
+                        
+                     
+                    </div>
+                                    </div>
+                  <div class=" my-2 text-center">
+                    <button class="btn btn-primary w-100" type="submit"  name="btn_submit"> Continue </button>
+                  </div>
+                </div>
+                <div class="col"><a href="/admin/reset-password" class="text-light" title="Click for recover your account details" ><i class="fa-solid fa-lock fa-fw" ></i> Reset password?</a></div> 
+              </div>
+        
+            </form>
+          </div>
+          
+        </div>
+      
+ 
+      </div>
+      
+    </div>
+   
+  
+  </div>

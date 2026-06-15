@@ -1,0 +1,96 @@
+{{template "partials/admin-header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+  </style>
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}} - {{.Mid}}</span></h4>
+                </div>
+                <!-- <div class="col-lg-6 text-end my-2"> <a href="/add-support-ticket" title="Add New Ticket" class="btn btn-sm btn-outline-primary template"> Add New Ticket</a></div> -->
+          </div>
+          {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show my-2" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}}
+
+            
+            <div class="accordion m-2" id="accordionExample">
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+<thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">Timestamp</th>
+                  <th scope="col">Subject</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">IP</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .LogsList}}
+                  <tr>
+                    <td class="date-cell">{{.Updated_on}}</td>
+                    <td>{{.Update_type}}</td>
+                    <td>{{.Update_desc}}</td>
+                    <td>{{.Update_ip}}</td>
+                  </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end fs-6 mx-2" colspan="9"> 
+                    <span class="mt-1 font-monospace mx-2 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                    &nbsp;<a href="?mid={{.Mid}}&page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-left"></i></a>
+                    {{ end }}
+                    {{ if lt (mul .Page .Limit) .Total }}
+                    &nbsp;<a href="?mid={{.Mid}}&page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-right"></i></a>
+                    {{ end }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+<!-- Modal Add Event -->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog modal-dialog-centered">
+      <div class="modal-content radius-16 bg-base">
+          <div class="modal-header py-16 px-24 border border-top-0 border-start-0 border-end-0">
+              <h1 class="modal-title fs-5" id="replyModalLabel">Add New Event</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-24">
+           
+              <iframe id="support_frame" src="" width="100%" height="500"></iframe>
+           
+          </div>
+      </div>
+  </div>
+</div>
+  {{template "partials/admin-footer" .}}
+  

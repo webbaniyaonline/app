@@ -1,0 +1,124 @@
+{{template "partials/admin-header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+  </style>
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}}</span></h4>
+                </div>
+                <div class="col-lg-6 text-end my-2"> <a href="/pdf" title="Download PDF" class="btn btn-sm btn-danger mb-2"> <i class="fa-solid fa-file-pdf "></i> </a> <a href="/excel-download" title="Download Excel" class="btn btn-sm btn-success mb-2"> <i class="fa-solid fa-file-excel"></i> </a></div>
+          </div>
+          {{if .AlertX}}
+      <div class="row mx-0">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{.AlertX}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+      {{end}}
+      {{template "partials/search-form-admin" .}}
+            <div class="accordion m-2" id="accordionExample">
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+                  <th scope="col">MID</th>
+                  <th scope="col">TransactionID</th>
+                  <th scope="col">Asset</th>
+                  <th scope="col">Requested</th>
+                  <th scope="col">Converted</th>
+                  <th scope="col">Received&nbsp;Type</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Timestamp</th>
+                  <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .TransactionList}}
+                  {{ $dataContext := . }}
+                  <tr>
+                    <td ><span class="accordion-button88" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{.Id}}" aria-expanded="false" aria-controls="collapse{{.Id}}"><i class="fa-solid fa-plus"></i></span></td>
+                    <td><a href="/admin/members-details/{{.Client_id}}" target="_blank" title="View Merchant Details">{{.Client_id}}</a></a></td>
+                    <td>{{.Transaction_id}}</a></td>
+                    <td  class="text-uppercase">{{.Receivedcurrency}} {{range index $.CoinList}}{{if eq $dataContext.Assetid .Coin_id}} 
+                      <p class="text-muted fw-bold" title="Network">{{.Coin_network}}</p> {{end}}{{end}}</td>
+                    <td class="text-uppercase">{{.Requestedcurrency}} {{.Requestedamount}}</td>
+                    <td class="text-uppercase">{{.Convertedcurrency}} {{.Convertedamount}}</td>
+                    <td class="text-uppercase">{{.Receivedcurrency}} {{.Receivedamount}}</td>
+                    <td class="text-uppercase">{{.Transaction_type}}</td>
+                    <td class="pay-status" >{{.Substatus}}</td>
+                    <td class="date-cell">{{.Createdate}}</td>
+                     <td ><a href="/admin/trans-details?TID={{.Transaction_id}}" title="View Details"><i class="fa-regular fa-eye"></i></a><!--<div class="dropdown dropstart" ><i class="fa-solid fa-ellipsis-vertical fw-bold mx-2"  type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                      <ul class="dropdown-menu">
+                      <li><button class="dropdown-item" type="button"><a class="hrefModal" data-tid="{{.Transaction_id}}" data-href="/admin/transaction-details/{{.Transaction_id}}" title="{{.Transaction_id}}">
+                        Mark as completed</a></button></li>
+                      
+                    </ul></div>--></td> 
+                  </tr>
+                  <tr>
+                    <td class="p-0" colspan="11"> <div id="collapse{{.Id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div class="accordion-body border border-warning rounded ">
+                        <div class="row">
+                          <div class="col-sm-6 my-1"><strong>Transaction ID :</strong> {{.Transaction_id}}</div>
+                          <div class="col-sm-6 my-1"><strong>Timestamp :</strong> {{.Createdate}}</div>
+                          <div class="col-sm-6 my-1"><strong>Destination address :</strong> {{.Destinationaddress}}</div>
+                          <div class="col-sm-6 my-1"><strong>Assetid :</strong><span class=" text-uppercase">{{.Assetid}}</span></div>
+                          <div class="col-sm-6 my-1" ><strong>Requested Amount :</strong> <span class="text-uppercase">{{.Requestedcurrency}}</span> {{.Requestedamount}} </div>
+                          <div class="col-sm-6 my-1"><strong>Converted Amount :</strong> <span class="text-uppercase">{{.Convertedcurrency}}</span> {{.Convertedamount}} </div>
+                          <div class="col-sm-6 my-1"><strong>Received Amount :</strong> <span class="text-uppercase">{{.Convertedcurrency}}</span> {{.Receivedamount}} </div>
+                          <div class="col-sm-6 my-1"><strong>Status :</strong> {{.Status}}</div>
+                        <div class="col-sm-12 my-1"><strong>Note :</strong> {{.Note}}</div>
+                        <div class="col-sm-6 my-1"><strong>Txhash :</strong> {{.Response_hash}}</div>
+                        <div class="col-sm-6 my-1"><strong>Comment By Approver :</strong> {{.Approver_comment}}</div>
+                        <div class="col-sm-6 my-1"><strong>Approved By :</strong> {{.Approved_by}} {{.Approver_id}}</div>
+                        <div class="col-sm-6 my-1"><strong>Approved On :</strong> {{.Approved_date}}</div>
+                          
+                        </div>
+  
+                      </div></td>
+                    </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end fs-6 mx-2" colspan="11"> 
+
+                    <span class="mt-1 font-monospace mx-2 float-start" > Page [{{ .Page }}] Total {{ .Total }}   </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&searchKey={{ .SearchKey }}&searchBy={{ .SearchBy }}&status={{ .Status }}&date_1st={{ .Date_1st }}&date_2nd={{ .Date_2nd }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-left"></i></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&searchKey={{ .SearchKey }}&searchBy={{ .SearchBy }}&status={{ .Status }}&date_1st={{ .Date_1st }}&date_2nd={{ .Date_2nd }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-right"></i></a>
+                  {{ end }}
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/admin-footer" .}}

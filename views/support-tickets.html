@@ -1,0 +1,187 @@
+{{template "partials/header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+}
+    .img-icon { width: 40px;margin-right: 10px;}
+    .jqte_tool.jqte_tool_1 .jqte_tool_label {height: unset !important;}
+    .jqte {  margin: 5px 0 !important;}
+     
+  </style>
+
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{ .Title }}</h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <div class="col-lg-12 text-end my-2"> <a href="/add-support-ticket" class="btn btn-sm btn-primary-600" title="Add New Ticket"><i class="ri-add-line"></i> Add New Ticket</a></div>
+    
+  </li>
+ 
+</div>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+           
+          {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show my-2" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}}
+
+            {{if eq .Action "List"}}
+            {{if ge  .Total 1}}
+            <div class="accordion m-2" id="accordionExample">
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0 bordered-table xsm-table">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">Ticket #</th>
+                  <th scope="col">Timestamp</th>
+                  <th scope="col">Subject</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .TicketList}}
+                  <tr>
+                    <td>{{.Ticket_id}}</td>
+                    <td class="date-cell">{{.Timestamp}}</td>
+                    <td class="text-uppercase">{{.Ticket_subject}}</td>
+                    <td class="support-status {{.Status}}">{{.Status}}</td>
+                    <td ><div class="dropdown">
+                      <button type="button" data-bs-toggle="dropdown" aria-expanded="false"> 
+                      <iconify-icon icon="entypo:dots-three-vertical" class="icon text-secondary-light"></iconify-icon> 
+                      </button>
+                      <ul class="dropdown-menu p-12 border bg-base shadow">
+                          <li>
+                           
+                              <button type="button" class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900 d-flex align-items-center gap-10 supportReply" data-tid="{{.Ticket_id}}" data-bs-toggle="modal" data-bs-target="#replyModal">
+                                  <iconify-icon icon="hugeicons:view" class="icon text-lg line-height-1"></iconify-icon>
+                                  View
+                              </button>
+                            
+                          </li>
+                          <!-- <li>
+                              <button type="button" class="dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-neutral-200 text-hover-neutral-900 d-flex align-items-center gap-10" data-bs-toggle="modal" data-bs-target="#replyModalEdit">
+                                  <iconify-icon icon="lucide:edit" class="icon text-lg line-height-1"></iconify-icon>
+                                  Edit
+                              </button>
+                          </li>
+                          <li>
+                              <button type="button" class="delete-item dropdown-item px-16 py-8 rounded text-secondary-light bg-hover-danger-100 text-hover-danger-600 d-flex align-items-center gap-10" data-bs-toggle="modal" data-bs-target="#replyModalDelete">
+                                  <iconify-icon icon="fluent:delete-24-regular" class="icon text-lg line-height-1"></iconify-icon>
+                                  Delete
+                              </button>
+                          </li> -->
+                      </ul>
+                  </div></td>
+                  </tr>
+                
+                {{end}}
+                <tr>
+              <td class="text-end fs-6 mx-2" colspan="9"> 
+                <span class="mt-1 font-monospace mx-4 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                {{ if gt .Page 1 }}
+              &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:backward" width="32" height="32" title="Previous Page"></iconify-icon></a>
+               {{ end }}
+              
+               {{ if lt (mul .Page .Limit) .Total }}
+               &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:forward" width="32" height="32" title="Next Page"></iconify-icon></a>
+              {{ end }}
+
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+          {{else}}
+          <h5 class="m-2 text-center fw-bold"> Ticket Not Found</h5>
+         {{end}}
+
+          {{else}}
+    
+          <form method="POST" action="/post-support-ticket" autocomplete="off">
+            
+              <div class="row">
+              
+               
+      
+              
+                <div class="col-md-12 my-2">
+                  <div class="form-floating">
+                    <input type="text" id="ticket_subject" name="ticket_subject" class="form-control" title="Subject" required="" value="">
+                    <label for="ticket_subject">Subject</label>
+                  </div>
+                </div>
+       
+                
+      
+                <div class="col-md-12 my-2">
+                  <div class="form-floating">
+                    <textarea  id="ticket_desc" name="ticket_desc" class="form-control editor" required></textarea>
+                  </div>
+                </div>
+               
+                <div class="col-md-12 my-2">
+                  <div class="form-floating">
+                <button type="submit" id="submit" class="btn btn-primary btn  btn-primary  mt-1" name="submit" title="submit" value="submit">Submit</button>
+              </div>
+          </div>
+              </div>
+              
+            </form>
+          {{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+<!-- Modal Add Event -->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog modal-dialog-centered">
+      <div class="modal-content radius-16 bg-base">
+          <div class="modal-header py-16 px-24 border border-top-0 border-start-0 border-end-0">
+              <h1 class="modal-title fs-5" id="replyModalLabel">Add New Event</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-24">
+           
+              <iframe id="support_frame" src="" width="100%" height="500"></iframe>
+           
+          </div>
+      </div>
+  </div>
+</div>
+
+
+  {{template "partials/footer" .}}
+    <script>
+     $('.supportReply').click(function(){ 		
+    var tid=$(this).attr('data-tid');
+    var modalUrls="{{$.CommonURL}}/support-details?tid=" + tid;
+    $('#support_frame').attr('src', modalUrls)
+    $('#replyModalLabel').html("Ticket # " + tid);
+  });
+   
+    </script>
+
+
+  <link rel="stylesheet" type="text/css" href="https://jqueryte.com/css/jquery-te.css"/>
+<script src="https://jqueryte.com/js/jquery-te-1.4.0.min.js"></script>
+<script>
+	$('.editor').jqte();
+</script>

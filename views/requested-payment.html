@@ -1,0 +1,107 @@
+{{template "partials/header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+</style>
+
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{ .Title }}</h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <div class="col-lg-12 text-end my-2"> <a href="/payment-request" class="btn btn-sm btn-primary-600" title="Request a payment"><i class="ri-add-line"></i> Add payment Request</a></div>
+    
+  </li>
+ </ul>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          
+          {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show my-2" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}}
+            {{if ge  .Total 1}}
+            <div class="accordion m-2" id="accordionExample">
+          <div class="table-responsive scroll-sm">
+            <table class="table table-centered table-nowrap mb-0 bordered-table xsm-table">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">Requested</th>
+                  <th scope="col">Link</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Created</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .TransactionList}}
+                  <tr>
+                    <td>{{.Product_name}}</td>
+                    <td >
+                      <div class="row border rounded mb-2 py-4 mx-2">
+                      <div class="col-sm-10"><span class="btn btn-sm btn-outline-primary float-start my-4 py-4" title="Pay Link : " id="copyAPI{{.Trackid}}">{{$.CommonURL}}/pay?iid={{.Trackid}}</span></div>
+                      <div class="col-sm-2"><iconify-icon icon="solar:copy-bold" class="float-start text-primary  mt-4" width="32" height="32" title="Click to copy" onclick="CopyToClipboard('#copyAPI{{.Trackid}}')"></iconify-icon><a href="{{$.CommonURL}}/pay?iid={{.Trackid}}" class=" mt-4" target="_blank" title="Click to pay"><iconify-icon icon="solar:link-circle-bold" class="text-primary" width="32" height="32"  style="color: #db1f32"></iconify-icon></a></div></td>
+                    </div>
+                      <td class="text-uppercase">{{.Requestedcurrency}} {{.Requestedamount}}</td>
+                    <td>{{if eq .Status "1"}} <i class="ri-checkbox-circle-line text-success fs-3"></i> {{else}} <i class="ri-close-circle-line text-danger fs-3"></i> {{end}}</td>
+                    <td class="date-cell" >{{.Createdate}}</td>
+                  </tr>
+              
+                {{end}}
+                <tr>
+                  <td class="text-end fs-6 mx-2" colspan="8"> 
+                    <span class="mt-1 font-monospace mx-4 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:backward" width="32" height="32" title="Previous Page"></iconify-icon></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:forward" width="32" height="32" title="Next Page"></iconify-icon></a>
+                  {{ end }}
+
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+          {{else}}
+          <div class="" id="forgotModal" tabindex="-1" aria-hidden="true">
+            <div class="">
+                <div class="modal-content radius-16 bg-base">
+                <div class="modal-body p-40 text-center">
+                    <div class="mb-32  text-center">
+                    <img src="/assets/images/auth/mail-attached.png" alt="Cart" style="height: 150px;">
+                    </div>
+                    <h6 class="mb-12">No payment request found</h6>
+                    <p class="text-secondary-light text-sm mb-0">You currently do not have any payment request.</p>
+                    <p class="text-secondary-light text-sm mb-0">Create one to start accepting payment</p>
+                    <br>
+                    <div class="my-2"> <a href="/payment-request" class="btn btn-sm btn-primary-600" title="Add payment Request"><i class="ri-add-line"></i> Add payment Request</a></div>
+                </div>
+                </div>
+            </div>
+        </div>
+         {{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+  {{template "partials/footer" .}}

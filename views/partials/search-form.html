@@ -1,0 +1,81 @@
+<style>
+    .input-icons .fa-solid.cals {position: absolute;padding-top: 8px;padding-left: 3px;font-size: 23px;z-index: 1;}
+    /* .input-icons { margin-bottom: 10px;} */
+    .input-field {width:100%;padding: 10px;text-align: center;}
+</style>
+<div class="col-sm-12 border rounded mb-2 py-2" id="s_box">
+          
+    <div class="widget-cl2 msearch_1 advSdiv mx-3" >
+      <form action="#" autocomplete="off">
+        <div class="row search_form_css">
+            <input type="hidden" name="action" value="select" />
+            
+
+            
+<div class="col-sm-4 px-1">  
+<input type="text" name="searchkey" id="searchkey" class="searchkey_adv form-control form-control-sm my-1 bg-transparent" placeholder="Search.." value="{{.SearchKey}}"></div>
+
+<div class="col-sm-2 px-1">  
+<select name="searchby" id="searchby" title="Select key name" class="filter_option s_key_name form-select form-select-sm my-1 bg-transparent" autocomplete="off">
+<option value="" selected="selected">Select</option>
+<option value="transaction_id" title="TransID" {{ if eq .SearchBy "transaction_id" }}selected{{ end }}>TransID</option>
+<option value="response_hash" title="Txhash" {{ if eq .SearchBy "response_hash" }}selected{{ end }}>Txhash</option>
+<option value="order_id" title="OrderID" {{ if eq .SearchBy "order_id" }}selected{{ end }}>OrderID</option>
+<option value="customerrefid" title="ReferenceID" {{ if eq .SearchBy "customerrefid" }}selected{{ end }}>ReferenceID</option>
+<option value="status" title="Status" {{ if eq .SearchBy "status" }}selected{{ end }}>Status</option>
+</select>
+</div>    
+
+<div class="col-sm-2 px-1">
+      <select name="status" id="status" class="select_cs_2 cole form-select form-select-sm my-1 bg-transparent">
+              <option value="" selected="selected">All Status</option>
+              <option value="0" {{ if eq .Substatus "0" }}selected{{ end }}>Waiting</option>
+              <option value="1" {{ if eq .Substatus "1" }}selected{{ end }}>Full Pay</option>
+              <option value="2" {{ if eq .Substatus "2" }}selected{{ end }}>Over Pay</option>
+              <option value="3" {{ if eq .Substatus "3" }}selected{{ end }}>Under Pay</option>
+              <option value="8" {{ if eq .Substatus "8" }}selected{{ end }}>Decline</option>
+              <option value="9" {{ if eq .Substatus "9" }}selected{{ end }}>Dispute</option>
+
+            </select>
+          </div>
+          
+<div class="col-sm-4 px-1 input-icons full_width" >
+<input type="text" class="form-control bg-primary text-white" name="date_range" id="date_range" placeholder="Custom Date" value="" style="width:1px; visibility:hidden; position:absolute;z-index:1;" />
+<span class="float-start" style="width:calc(100% - 90px);">
+<!-- <i class="fa-solid fa-calendar-days cals fs-2x text-info" ></i> -->
+<iconify-icon icon="uim:calender" width="24" height="32" class="fa-solid cals fs-2x text-info"></iconify-icon>
+
+<select id="time_period" name='time_period' title='Date Range' class='filter_option form-select form-select-sm my-1' onClick="time_periodf1(this.value)" onChange="time_periodf(this.value)" style="padding-left:30px;z-index: 4;background:transparent;"  >
+<option selected="" value="">Date</option>
+<option value="4" {{ if eq .Time_period "4" }}selected{{ end }}>Today</option>
+<option value="1" {{ if eq .Time_period "1" }}selected{{ end }}>Last 7 days</option>
+<option value="2" {{ if eq .Time_period "2" }}selected{{ end }}>Last 30 days</option>
+<option value="5" {{ if eq .Time_period "5" }}selected{{ end }}>Custom dates</option>
+</select>
+</span>
+
+
+
+
+<input type="hidden" class="form-control" name="date_1st" id="date_1st" />
+<input type="hidden" class="form-control" id="date_2nd" name="date_2nd" />
+
+<button type="submit" name="csearch" value="filter" class="adv_search  my-1  ms-2 float-start"><iconify-icon icon="mynaui:search-square" width="44" height="44"></iconify-icon></button>
+<a class=" float-start"  onClick="removeSearch()" style="padding-top: 7px;"><iconify-icon icon="fluent-emoji-high-contrast:cross-mark-button" width="36" height="36" title="Remove search data"></iconify-icon> </a>
+
+</div>
+           
+
+
+
+        
+        </div>
+      </form>
+    </div>
+  
+  
+  
+
+  <script>$('#status_csearch option[value="').prop('selected','selected');</script>
+
+</div>

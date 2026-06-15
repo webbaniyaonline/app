@@ -1,0 +1,118 @@
+{{template "partials/support-files" .}}
+
+<section class="auth bg-base d-flex flex-wrap">  
+    <div class="auth-left d-lg-block d-none">
+        <div class="d-flex align-items-center flex-column h-100 justify-content-center">
+            <img src="/assets/images/auth/auth-img.png" alt="">
+        </div>
+    </div>
+    <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
+        <div class="max-w-464-px mx-auto w-100">
+            <div>
+                <a href="/" class="mb-40 max-w-290-px">
+                    <img src="{{.LogoDark}}" alt="Logo" style="max-height: 50px;">
+                </a>
+                <h4 class="mb-12">Two-factor authentication</h4>
+                <p class="mb-32 text-secondary-light text-lg">Please enter your 6-digit authentication code from the Google Authenticator app.</p>
+
+                {{if .Alert}}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <iconify-icon icon="mdi:alert-circle-outline" class="icon text-xl float-start mx-2 mt-2"></iconify-icon>
+          <strong class="float-start mx-2"></iconify-icon> {{.Alert}}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <div class="clearfix"></div>
+
+        </div>
+        <br/>
+
+
+        {{end}}
+            </div>
+            <div id="msgbox" class="text-danger fw-bold"></div>
+            <form id="myForm">
+                <input type="hidden" name="cid" id="cid" value="{{.LoginMerchantID}}">
+                <div class="icon-field00 mb-16">
+                  
+                    <input type="number"   class="form-control h-56-px bg-neutral-50 radius-12 text-center fw-bolder" id="code" name="code" placeholder="******" min="100000" max="999999" maxlength="6" 
+                    oninput="if(this.value.length > 6) this.value = this.value.slice(0, 6);" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32 match-2fa"> Verify</button>
+
+             
+                <div class="mt-32 text-center text-sm">
+                    <p class="mb-0"><i class="ri-smartphone-fill"></i> Open two factor authentication app on your device to view your authentication code and verify your identity.</p>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</section>
+
+
+{{template "partials/footer" .}}
+<script>
+$('.match-2fa').on('click', function () {
+
+var code=$('#code').val();
+     if(code==''){
+         alert('Please enter 123456');
+         return false;
+     }else if($.trim(code).length != 6){
+         alert('Please enter 6 digit number');
+         return false;
+     }else if(!$.isNumeric(code)){
+         alert('Please enter Numeric Value');
+         return false;
+     }
+
+      // Prevent default form submission
+      event.preventDefault();
+
+// Get form data
+var formData = {
+    cid: $("#cid").val(),
+    code: $("#code").val(),
+};
+
+// Send AJAX POST request
+$.ajax({
+    type: "POST",
+    url: "/activate-2fa-submit",
+    data: JSON.stringify(formData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(response) {
+      // Convert response object to a string
+      var stringifiedResponse = JSON.stringify(response);
+      // Parse the stringified response back to an object
+      var parsedResponse = JSON.parse(stringifiedResponse);
+
+      // Access individual data
+      var message = parsedResponse.message;
+      var status = parsedResponse.status; 
+     // alert(message)
+      //alert(status)
+      if(status==200){
+        window.location.href = "/";
+      }else{
+        $("#msgbox").html("Error : " +message)
+      }
+      
+    },
+    error: function(err) {
+        console.log("Error: ", err);
+    }
+});
+
+
+
+    }) 
+ 
+
+</script>
+     
+<script>
+$(".d-footer").css("display", "none"); 
+</script>
+

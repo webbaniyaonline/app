@@ -1,0 +1,204 @@
+{{template "partials/admin-header" .}}
+<style>
+  .img-icon {height: 1.5rem !important;}
+</style>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+         
+
+          <div class="row">
+            <div class="col-lg-8">
+                <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}} - {{.Action}} {{if eq .Action "Edit"}} {{if .CoinIcon}} <img class="img-icon" src="/views/images/{{.CoinIcon}}" style="max-width: 20px;" />{{end}} {{end}}</span></h4>
+            </div>
+            <div class="col-lg-4 text-end my-2"> {{if eq .Action "List"}}<a href="/admin/add-coin" title="Add Coin" class="btn btn-sm btn-outline-primary template"> Add Coin</a>&nbsp;<a href="/admin/manage-address" title="Manage Address" class="btn btn-sm btn-outline-primary template"> Manage Addresses</a>{{end}} </div>
+      </div>
+  
+      {{if .AlertX}}
+      <div class="row mx-0">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{.AlertX}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+      {{end}}
+      {{if eq .Action "List"}}
+      
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">Icon</th>
+                  <th scope="col">Coin</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Network</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">TrustID <a href="https://github.com/trustwallet/wallet-core/blob/master/registry.json" target="_parent" title="view TrustID"><i class="fa-solid fa-circle-info fa-fw text-info"></i></a></th>
+                  <th scope="col" class="text-end mx-2">Action</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+
+                  {{range .CoinList}}
+                  {{ $dataContext := . }}
+                  <tr>
+                    <td><img class="img-icon" src="/views/images/{{.Icon}}" title="{{.Coin}}"/></td>
+                    <td class="text-uppercase">{{.Coin}}</td>
+                    <td class="text-capitalize">{{.Coin_title}}</td>
+                    <td><span class="badge text-bg-danger mx-2">{{.Coin_network}}</span></td>
+                    <td> <a name="Add" href="/admin/add-address?CID={{.Coin_id}}&CNAME={{.Coin}}" value="Add Address" title="Add Address" class="btn btn-sm btn-primary mb-2"><i class="fa-solid fa-circle-plus"></i></a>&nbsp;<a name="View" href="#" value="View Address" title="View Address" class="btn btn-sm btn-primary mb-2 display" data-tid="v{{.Coin_id}}" data-title="{{.Coin}}"><i class="fa-solid fa-eye"></i></a>
+                      <div id="v{{.Coin_id}}" style="display: none;">
+                      {{range index $.CoinAddress}}
+                        {{if eq $dataContext.Coin_id .Coin_id}}
+                        <h4 class="header-title mb-4">
+                        <a class="text-break" href="{{$dataContext.Coin_status_url}}{{.Address}}" target="_blank" title="View Details"><i class="fa-solid fa-square-arrow-up-right"></i> {{.Address}}</a> 
+                        </h4> 
+                       {{end}}
+                      {{end}}
+                    </div>
+                    </td> 
+                    <td>{{if eq .Status 1}} <i class="fa-regular fa-circle-check text-success"></i> {{else}} <i class="fa-regular fa-circle-xmark text-danger"></i> {{end}}</td>
+                    <td>{{.Coin_pay_url}}</td>
+                    <td class="text-end mx-2"><a class="text-dark mx-2" href="/admin/coin-list/edit/{{.Coin_id}}" title="EDIT COIN"><i class="fa-solid fa-pen-to-square"></i></a> <a class="text-danger mx-2" href="/admin/coin-list/delete/{{.Coin_id}}" title="DELETE COIN"><i class="fa-solid fa-trash"></i></a></td>
+                  </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end mx-2 fs-6" colspan="8"> 
+                    <span class="mt-1 font-monospace mx-2 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-left"></i></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-right"></i></a>
+                  {{ end }}
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+           
+          </div>
+
+      {{else}}
+    
+      <form method="POST" action="/admin/CoinPost" autocomplete="off" enctype="multipart/form-data">
+      <input type="hidden" name="coinId" value="{{if .CoinID}}{{.CoinID}}{{end}}">
+      <input type="hidden" name="coinImg" value="{{if .CoinIcon}}{{.CoinIcon}}{{end}}">
+      <input type="hidden" name="mode" value="{{.Action}}">
+      <input type="hidden" id="crypto_title" name="crypto_title" value="{{if .CoinTitle}}{{.CoinTitle}}{{end}}">
+      
+        <div class="row">
+        
+         
+
+       
+          <div class="col-md-6 my-2">
+            
+            <div class="form-floating">
+                <select class="form-select" name="crypto_code" id="crypto_code" title="Crypto Code" required="" onchange="fetchStates()">
+                <option value="" >Select</option>
+                {{range .CurrencyList}}
+                <option value="{{.Crypto_code}}" data-title="{{.Crypto_title}}" >{{.Crypto_code}} - {{.Crypto_title}}</option>
+                {{end}}
+                </select>
+                <label for="crypto_code">Select Crypto Code</label>
+                <script>$('#crypto_code option[value="{{if .CoinCode}}{{.CoinCode}}{{end}}"]').prop('selected','selected');</script>
+              </div>
+          </div>
+          <div class="col-md-6 my-2">
+          <div class="form-floating">
+            <select class="form-select" name="crypto_network" id="crypto_network" title="Crypto Network" required="">
+            <option value="" >Select</option>
+            {{if .CoinNetwork}}
+            <option value="{{.CoinNetwork}}" selected >{{.CoinNetwork}}</option>
+            {{end}}
+
+            </select>
+            <label for="crypto_network">Select Crypto Network</label>
+          </div>
+        </div>
+         
+        <div class="col-md-6 my-2">
+          <div class="form-floating">
+            <input type="text" id="coin_status_url" name="coin_status_url" class="form-control" title="Coin Web URL" required="" value="{{if .CoinStatusUrl}}{{.CoinStatusUrl}}{{end}}">
+            <label for="coin_status_url">Coin Web URL</label>
+          </div>
+        </div>
+
+        
+        <div class="col-md-6 my-2">
+          <div class="form-floating">
+            <input type="text" id="coin_pay_url" name="coin_pay_url" class="form-control" title="coin pay url"  value="{{if .CoinPayUrl}}{{.CoinPayUrl}}{{end}}">
+            <label for="coin_pay_url">Coin Pay URL</label>
+          </div>
+        </div>
+          
+
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="file" id="icon" name="icon" class="form-control" title="Icon" {{if eq $.Action "Add"}} required="" {{end}} value="{{if .CoinIcon}}{{.CoinIcon}}{{end}}">
+              <label for="icon">Icon</label>
+            </div>
+          </div>
+
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <select class="form-select" name="status" id="status" title="Status" required="">
+              <option value=1 {{ if eq .CoinStatus 1 }}selected{{end}}>Active</option>
+              <option value=2 {{ if eq .CoinStatus 2 }}selected{{end}}>Deleted</option>
+              </select>
+              <label for="status">Status</label>
+              
+            </div>
+          </div>
+        
+
+          
+        </div>
+        <button type="submit" id="submit" class="btn btn-sm btn-primary template" name="submit" title="submit" value="submit">Submit</button>
+      </form>
+      {{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/admin-footer" .}}
+  <!-- Modal for Transaction Responce -->
+<div class="modal" id="addresDisplay">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Transaction Responce</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal for Transaction Responce -->
+  <script>
+$('.display').click(function(){
+  var tid=$(this).attr('data-tid');
+  var title=$(this).attr('data-title');
+  var text = $('#'+tid).html(); 
+
+  Modtitle="Address - " + title
+
+  $('#addresDisplay').modal('show');
+	$('#addresDisplay .modal-title').html(Modtitle);
+  $('#addresDisplay .modal-body').html(text);
+  
+});
+
+  </script>

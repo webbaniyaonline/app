@@ -1,0 +1,69 @@
+{{template "partials/header" .}}
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{ .Title }}</h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <a href="/" class="d-flex align-items-center gap-1 hover-text-primary">
+      <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+      Dashboard
+    </a>
+  </li>
+  <li>-</li>
+  <li class="fw-medium">{{ .Title }}</li>
+</ul>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0 bordered-table xsm-table">
+             <thead>
+                <tr class="font-weight-bolder">
+                  <!-- <th scope="col">User&nbsp;Name</th> -->
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">No of use</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .CustomerData}}
+                <tr>
+                  <!-- <td>{{.Client_id}}</td> -->
+                  <td>{{.Customer_name}}</td>
+                  <td>{{.Customer_email}}</td>
+                  <td>{{.Total_customer}}</td>
+                </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end fs-6" colspan="3"> 
+                    
+                    
+              
+                    <span class="mt-1 font-monospace mx-4 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:backward" width="32" height="32" title="Previous Page"></iconify-icon></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:forward" width="32" height="32" title="Next Page"></iconify-icon></a>
+                  {{ end }}
+              
+
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+  {{template "partials/footer" .}}

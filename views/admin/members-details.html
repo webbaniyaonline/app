@@ -1,0 +1,429 @@
+{{template "partials/admin-header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+  </style>
+  <style>
+    .btn:hover {
+        color:#000033;
+    }
+    .nav-pills .nav-link {
+        color: #000000 !important;
+        /*background-color: #8ab3a5 !important;*/
+        border: 1px solid #eee !important;
+        box-shadow: inset 0px 0px 0px 3px #f7f7f7;
+        
+    }
+    .nav-pills .nav-link:hover {
+        color:#006600 !important;
+        box-shadow: inset 0px 0px 0px 3px #f7f7f7 !important;
+    }
+    .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+        color: #fff !important;
+        background-color: #8ab3a5 !important;
+        border: 1px solid #eee !important;
+    }
+    .fa-star-of-life{
+    color:#FF0000 !important;
+    font-size:10px !important;
+    }
+    
+    .col-form-label44 {
+        padding-top:0px !important;
+        padding-bottom: 0px !important;
+        }
+    .text-start:hover {
+        background: none !important;
+    }
+    </style>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"><i class="fa-solid fa-user-tie fa-fw"></i> {{.Title}} :: {{.MemberList.Full_name}}<a href="/admin/merchant-logs?mid={{.MemberList.Client_id}}" title="view Logs" target="_blank"><i class="fa-solid fa-circle-info fa-fw text-info"></i></a> </span></h4>
+                </div>
+                <div class="col-lg-6 text-end my-2"> </div>
+          </div>
+            {{if .AlertX}}
+            <div class="alert alert-warning alert-dismissible fade show my-2" role="alert">
+              <strong>{{.AlertX}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{end}}
+            <div >
+                
+                <div class="nav flex-rows nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical"> 
+				
+                    <span class=" button nav-link m-1 active" id="v-PersonalDetails-tab" data-bs-toggle="pill" data-bs-target="#v-PersonalDetails" type="button" role="tab" aria-controls="v-PersonalDetails" aria-selected="true" title="Account Summary"><i class="fa-solid fa-user-tie" ></i> </span> 
+                                    
+                    <span class=" button nav-link m-1" id="v-CWallet-tab" data-bs-toggle="pill" data-bs-target="#v-CWallet" type="button" role="tab" aria-controls="v-CWallet" aria-selected="false" tabindex="-1" title="Crypto Wallet"><i class="fa-brands fa-bitcoin" ></i> </span> 
+                                    
+                    <!-- <span class="nav-link m-1" id="v-Acquirer-tab" data-bs-toggle="pill" data-bs-target="#v-Acquirer" type="button" role="tab" aria-controls="v-Acquirer" aria-selected="false" tabindex="-1" title="Acquirer"><i class="fa-solid fa-landmark" ></i> </span>  -->
+                                    
+                    <span class="nav-link m-1" id="v-FeeDetails-tab" data-bs-toggle="pill" data-bs-target="#v-FeeDetails" type="button" role="tab" aria-controls="v-FeeDetails" aria-selected="false" tabindex="-1" title="Fee Engine"><i class="fa-solid fa-file-invoice-dollar" ></i> </span> 
+                    
+                    <span class="nav-link m-1" id="v-ApiKey-tab" data-bs-toggle="pill" data-bs-target="#v-ApiKey" type="button" role="tab" aria-controls="v-ApiKey" aria-selected="false" tabindex="-1" title="ApiKey"><i class="fa-brands fa-keycdn" ></i> </span> 
+                    
+                    <span class="nav-link m-1" id="v-Balance-tab" data-bs-toggle="pill" data-bs-target="#v-Balance" type="button" role="tab" aria-controls="v-Balance" aria-selected="false" tabindex="-1" title="Balance"><i class="fa-brands fa-bitcoin" ></i> </span> 
+                    <span class="nav-link m-1" id="v-Transaction-tab" data-bs-toggle="pill" data-bs-target="#v-Transaction" type="button" role="tab" aria-controls="v-Transaction" aria-selected="false" tabindex="-1" title="Transaction"><i class="fa-solid fa-rectangle-list" ></i> </span> 
+                    <span class="nav-link m-1" id="v-Withdraw-tab" data-bs-toggle="pill" data-bs-target="#v-Withdraw" type="button" role="tab" aria-controls="v-Withdraw" aria-selected="false" tabindex="-1" title="Withdraw"><i class="fa-solid fa-coins" ></i> </span> 
+                    <a href="/pdf?mid={{.MemberList.Client_id}}"><span class="nav-link m-1"   type="button" role="tab" title="Download Transaction in PDF"><i class="fa-solid fa-file-pdf text-danger" ></i> </span> </a>
+                    <a href="/excel-download?mid={{.MemberList.Client_id}}"><span class="nav-link m-1"  type="button" role="tab"  title="Download Transaction in EXCEL"><i class="fa-solid fa-file-excel text-success" ></i> </span></a> 
+       
+                    </div>
+                                    
+                    <div class="tab-content" id="v-pills-tabContent">
+                                    
+                    <div class="tab-pane fade show  active " id="v-PersonalDetails" role="tabpanel" aria-labelledby="v-PersonalDetails-tab" tabindex="0">
+                                      
+                                      <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="Account Summary"></i>&nbsp;&nbsp;Account Summary</span>
+                                      <a class="text-primary pointer" onClick="iframe_open_modal(this);" data-tid="Profile Details - (vikashg@itio.in)" data-ihref="https://itio.in/neobank/signins/profile_summary.php?client_id=3&amp;admin_view=1"><span class="badge rounded-pill border text-dark py-2 px-4 my-2" title="Update Profile"><i class="fa-solid fa-pen-to-square text-success"></i></span></a>
+                                      
+                                      <div class="row text-center">
+                                        <div class="col">
+                                          <div class="card rounded-3 shadow-sm border-primary">
+                                            <div class="card-header py-3 text-white bg-primary border-primary">
+                                              <h3 class="my-0 fw-2 fs-6 text-white">Merchant Information</h3>
+                                            </div>
+                                            <div class="card-body">
+                                              <div class="row">
+                                                <div class="col-sm-3 text-start">Name</div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Title}} {{.MemberList.Full_name}}</div>
+                                                <div class="col-sm-3 text-start">Email</div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Username}}</div> 
+                                                <div class="col-sm-3 text-start">Contact Number</div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Country_code}}  {{.MemberList.Mobile}}</div>
+                                                <div class="col-sm-3 text-start">Gender</div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Gender}} </div>
+                                                <div class="col-sm-3 text-start">Date of Birth </div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Birth_date}} </div>
+                                                <div class="col-sm-3 text-start">Date of Joining </div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Timestamp}} </div>
+                                                <div class="col-sm-3 text-start">Address Line - 1 </div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Address_line1}} </div>
+                                                <div class="col-sm-3 text-start">Address Line - 2 </div>
+                                                <div class="col-sm-3 text-start">: {{.MemberList.Address_line2}} </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        
+                                      
+                                      </div>
+                    </div>
+                                      
+                    <div class="tab-pane fade show " id="v-CWallet" role="tabpanel" aria-labelledby="v-CWallet-tab" tabindex="0">
+                    <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="Crypro Wallet"></i>&nbsp;&nbsp;Crypro Wallet</span>
+                    
+                    <div class="row">
+                    
+                                        <div class="table-responsive">
+                                          <table class="table table-centered table-nowrap mb-0">
+                                            <thead>
+                                              <tr class="bg-primary text-white rounded">
+                                                <th scope="col">Code</th>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Network</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Status</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{range .CryptoWalletList}}
+                                                <tr>
+                                                    <td class="text-uppercase">{{.Crypto_code}}</td>
+                                                    <td class="text-capitalize">{{.Crypto_title}}</td>
+                                                    <td>{{.Crypto_network}}</td>
+                                                    <td>{{.Crypto_address}}</td>
+                                                    <td>{{if eq .Status 1}} <i class="fa-regular fa-circle-check text-success"></i> {{else}} <i class="fa-regular fa-circle-xmark text-danger"></i> {{end}}</td>
+                                              </tr>
+                                                {{end}} 
+                                      
+                                                                      </tbody>
+                                          </table>
+                                        </div>
+                                                          </div>
+                    </div>
+                    
+                    <div class="tab-pane fade show" id="v-Acquirer" role="tabpanel" aria-labelledby="v-Acquirer-tab" tabindex="0">
+                    <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="Acquirer"></i>&nbsp;&nbsp;Acquirer</span>
+                    
+                                    <div class="row">
+                                                            <div class="table-responsive">
+                                          <table class="table table-centered">
+                                            <thead>
+                                              <tr class="bg-primary text-white rounded-3">
+                                                <th scope="col"><strong>Assigned Acquirer</strong></th>
+                                                <th scope="col"><strong>Status</strong></th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                               <td>GoPayment</td>
+                                               <td>Active</td>
+                                              </tr>
+                                            
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                    </div>	
+                                  
+                    <div class="tab-pane fade show" id="v-FeeDetails" role="tabpanel" aria-labelledby="v-FeeDetails-tab" tabindex="0">	
+                    <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="Issued IBAN"></i>&nbsp;&nbsp;Fee Engine / Transaction Fee</span>	 
+                     <a class="text-primary pointer" onClick="iframe_open_modal(this);" data-tid="Fee Engine / Transaction Fee" data-ihref="https://itio.in/neobank/signins/manage-fee.php?client_id=3&amp;admin_view=1" title="Add Your Fee Engine / Transaction Fee"><span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-circle-plus text-success"></i></span></a>	 
+                     <div class="row">
+                    
+                                        <div class="table-responsive">
+                                          <table class="table table-striped77">
+                                            <tbody>
+                                                                      
+                                              <tr>
+                                                <td scope="col">Fees</td>
+                                                <td scope="col"></td>
+                                                <td scope="col">Transaction Fee in % </td>
+                                                <td scope="col">: {{.FeeList.Amount_fee_in_percent}}</td>
+                                                <td scope="col">Minimum Transaction Fee</td>
+                                                <td scope="col">: {{.FeeList.Min_amount_fee}}</td>
+                                              </tr>
+                                              
+                                                                        
+                                            </tbody>
+                                          </table>
+                                        </div>
+                    
+                                      </div>
+                    </div>	
+                    
+                    <div class="tab-pane fade show" id="v-ApiKey" role="tabpanel" aria-labelledby="v-ApiKey-tab" tabindex="0">	
+                        <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="API Key"></i>&nbsp;&nbsp;API Key</span>	 
+                         <div class="row">
+                        
+                                            <div class="table-responsive">
+                                                {{range .ClientAPI}}
+                                                <div class="row bg-light border rounded mb-2 py-2 mx-2">
+                                                  <div class="col-sm-8 "><span class="btn btn-sm btn-outline-warning" title="Api Key : " id="copyAPI">{{.Apikey}}</span><i class="fa-solid fa-copy mx-2 fs-5" title="Click to copy" onclick="CopyToClipboard('#copyAPI')"></i></div>
+                                                  <div class="col-sm-4 date-cell text-end">{{.Timestamp}}</div>
+                                                </div>
+                                                {{end}}
+                                                
+                                                
+                                            </div>
+                        
+                                          </div>
+                    </div>
+
+                    <div class="tab-pane fade show" id="v-Balance" role="tabpanel" aria-labelledby="v-Balance-tab" tabindex="0">	
+                            <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="Balance"></i>&nbsp;&nbsp;Balance</span>	 
+                             <div class="row">
+                            
+                                <div class="row px-3">
+          
+                                    {{range .CoinBalanceList}}   
+                                    {{ $dataContext := . }}
+                                    {{if gt .Balance "0"}}
+                                    
+                              <div class="col-sm-3">
+                                <div class="card changeiban" data-iban="1">
+                                  <div class="card-body">
+                                    {{range index $.CoinList}} {{if eq $dataContext.Assetid .Coin_id}} 
+                                    <div class="media">
+                                      <div class="media-body">
+                                        <h5><span class="text-uppercase">{{.Coin}}</span> {{.Coin_title}} <br><span class="badge text-bg-danger">{{.Coin_network}}</span>  </h5>
+                                      </div>
+                                      <div class="avatar-xs"> <span class="mx-2"><img class="img-icon" src="/views/images/{{.Icon}}">  </span> </div>
+                                    </div>
+                                    <h4 class="m-0 align-self-center">{{$dataContext.Balance}}  <span class="text-uppercase">{{.Coin}}</span></h4>
+                                    {{end}}{{end}}
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                              {{end}}       
+                                {{end}}       
+                              </div>
+                            
+                                              </div>
+                    </div>
+
+                    <div class="tab-pane fade show " id="v-Transaction" role="tabpanel" aria-labelledby="v-Transaction-tab" tabindex="0">
+                        <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="Latest Transaction"></i>&nbsp;&nbsp;Latest Transaction</span>
+                        
+                        
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right">Latest 50 Transactions</span></h4>
+<div class="accordion m-2" id="accordionExample">
+  <div class="table-responsive">
+    <table class="table table-centered table-nowrap mb-0">
+      <thead>
+        <tr class="font-weight-bolder">
+          <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+          <th scope="col">TransactionID</th>
+          <th scope="col">Asset</th>
+          <th scope="col" title="Requested Amount">Requested</th>
+          <th scope="col" title="Converted Amount">Converted</th>
+          <th scope="col" title="Received Amount">Received</th>
+          <th scope="col">Type</th>
+          <th scope="col">Status</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody id="none">
+          {{range .TransactionList}} 
+          {{ $dataContext := . }}
+        <tr>
+          <td ><span class="accordion-button88" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{.Id}}" aria-expanded="false" aria-controls="collapse{{.Id}}"><i class="fa-solid fa-plus"></i></span></td>
+          <td>{{.Transaction_id}}</td>
+          <td  class="text-uppercase">{{.Receivedcurrency}} {{range index $.CoinList}}{{if eq $dataContext.Assetid .Coin_id}} 
+            <p class="text-muted fw-bold" title="Network">{{.Coin_network}}</p> {{end}}{{end}}</td>
+          <td class="text-uppercase">{{.Requestedcurrency}} {{.Requestedamount}}</td>
+          <td class="text-uppercase">{{.Convertedcurrency}} {{.Convertedamount}}</td>
+          <td class="text-uppercase">{{.Receivedcurrency}} {{.Receivedamount}}</td>
+          <td class="text-uppercase">{{.Transaction_type}}</td>
+          <td class="pay-status" >{{.Substatus}}</td>
+          <td class="date-cell">{{.Createdate}}</td>
+        </tr>
+        <tr>
+          <td class="p-0" colspan="9"> <div id="collapse{{.Id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body border border-warning rounded p-4 ">
+              <div class="row">
+              <div class="col-sm-6 my-1"><strong>Transaction ID :</strong> {{.Transaction_id}}</div>
+              {{if .Order_id}}
+                                          <div class="col-sm-6 my-1"><strong>Order ID :</strong> {{.Order_id}}</div>
+                                          {{end}}
+                                          <div class="col-sm-6 my-1"><strong>Reference ID :</strong> {{.Customerrefid}}</div>
+                                          
+              <div class="col-sm-6 my-1"><strong>Timestamp :</strong> {{.Createdate}}</div>
+              <div class="col-sm-6 my-1"><strong>Destination address :</strong> {{.Destinationaddress}}</div>
+              <div class="col-sm-6 my-1"><strong>Assetid :</strong><span class=" text-uppercase">{{.Assetid}}</span></div>
+              <div class="col-sm-6 my-1" ><strong>Requested Amount :</strong> <span class="text-uppercase">{{.Requestedcurrency}}</span> {{.Requestedamount}} </div>
+              <div class="col-sm-6 my-1"><strong>Converted Amount :</strong> <span class="text-uppercase">{{.Convertedcurrency}}</span> {{.Convertedamount}} </div>
+              <div class="col-sm-6 my-1"><strong>Received Amount :</strong> <span class="text-uppercase">{{.Receivedcurrency}}</span> {{.Receivedamount}} </div>
+              <div class="col-sm-6 my-1"><strong>Status :</strong> {{if eq .Status "Success"}}<span class="badge text-bg-success">Success</span>{{else if eq .Status "Waiting"}}<span class="badge text-bg-warning">Waiting</span>{{else}}<span class="badge text-bg-danger">Declined</span>{{end}}</div>
+              <div class="col-sm-6 my-1"><strong>Txhash :</strong> {{.Response_hash}}</div>
+              <div class="col-sm-6 my-1"><strong>Note :</strong> {{.Note}}</div>
+              
+            </div>
+
+            </div>
+          </div>
+          </td>
+          </tr>
+        {{end}}
+       
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+</div>
+</div>
+
+</div>
+
+                    </div>
+
+                    <div class="tab-pane fade show " id="v-Withdraw" role="tabpanel" aria-labelledby="v-Withdraw-tab" tabindex="0">
+                        <span class="badge rounded-pill border text-dark py-2 px-4 my-2"><i class="fa-solid fa-hand-point-right" title="Withdraw"></i>&nbsp;&nbsp;Withdraw</span>
+                        
+                        
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right">Latest 10 Withdrawl</span></h4>
+<div class="accordion m-2" id="accordionExample">
+  <div class="table-responsive">
+    <table class="table table-centered table-nowrap mb-0">
+      <thead>
+        <tr class="font-weight-bolder">
+          <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+          <th scope="col">TransactionID</th>
+          <th scope="col">Asset</th>
+          <th scope="col" title="Requested Amount">Requested</th>
+          <th scope="col" title="Converted Amount">Converted</th>
+          <th scope="col" title="Received Amount">Received</th>
+          <th scope="col">Type</th>
+          <th scope="col">Status</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody id="none">
+          {{range .WithdrawList}} 
+          {{ $dataContext := . }}
+        <tr>
+          <td ><span class="accordion-button88" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{.Id}}" aria-expanded="false" aria-controls="collapse{{.Id}}"><i class="fa-solid fa-plus"></i></span></td>
+          <td>{{.Transaction_id}}</td>
+          <td  class="text-uppercase">{{.Receivedcurrency}} {{range index $.CoinList}}{{if eq $dataContext.Assetid .Coin_id}} 
+            <p class="text-muted fw-bold" title="Network">{{.Coin_network}}</p> {{end}}{{end}}</td>
+          <td class="text-uppercase">{{.Requestedcurrency}} {{.Requestedamount}}</td>
+          <td class="text-uppercase">{{.Convertedcurrency}} {{.Convertedamount}}</td>
+          <td class="text-uppercase">{{.Receivedcurrency}} {{.Receivedamount}}</td>
+          <td class="text-uppercase">{{.Transaction_type}}</td>
+          <td class="pay-status" >{{.Substatus}}</td>
+          <td class="date-cell">{{.Createdate}}</td>
+        </tr>
+        <tr>
+          <td class="p-0" colspan="9"> <div id="collapse{{.Id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body border border-warning rounded p-4 ">
+              <div class="row">
+              <div class="col-sm-6 my-1"><strong>Transaction ID :</strong> {{.Transaction_id}}</div>
+              <div class="col-sm-6 my-1"><strong>Timestamp :</strong> {{.Createdate}}</div>
+              <div class="col-sm-6 my-1"><strong>Destination address :</strong> {{.Destinationaddress}}</div>
+              <div class="col-sm-6 my-1"><strong>Assetid :</strong><span class=" text-uppercase">{{.Assetid}}</span></div>
+              <div class="col-sm-6 my-1" ><strong>Requested Amount :</strong> <span class="text-uppercase">{{.Requestedcurrency}}</span> {{.Requestedamount}} </div>
+              <div class="col-sm-6 my-1"><strong>Converted Amount :</strong> <span class="text-uppercase">{{.Convertedcurrency}}</span> {{.Convertedamount}} </div>
+              <div class="col-sm-6 my-1"><strong>Received Amount :</strong> <span class="text-uppercase">{{.Receivedcurrency}}</span> {{.Receivedamount}} </div>
+              <div class="col-sm-6 my-1"><strong>Status :</strong> {{if eq .Status "Success"}}<span class="badge text-bg-success">Success</span>{{else if eq .Status "Waiting"}}<span class="badge text-bg-warning">Waiting</span>{{else}}<span class="badge text-bg-danger">Declined</span>{{end}}</div>
+              <div class="col-sm-6 my-1"><strong>Txhash :</strong> {{.Response_hash}}</div>
+              <div class="col-sm-6 my-1"><strong>Note :</strong> {{.Note}}</div>
+              
+            </div>
+
+            </div>
+          </div>
+          </td>
+          </tr>
+        {{end}}
+       
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+</div>
+</div>
+
+</div>
+
+                    </div>
+
+                    
+                    
+                    </div>
+             
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/admin-footer" .}}

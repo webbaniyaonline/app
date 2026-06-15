@@ -1,0 +1,135 @@
+{{template "partials/support-files-admin" .}}
+</head>
+  <body data-layout="horizontal" class="h-100">
+<style>
+  .img-icon{
+    height: 50px;
+    margin-right: 10px;
+  }
+  .avatar-xs {
+      height: 30px;
+      width: 60px;
+  }
+  .h-40-px {
+    height: 2.5rem !important;
+}
+.w-40-px {
+    width: 2.5rem !important;
+}
+  </style>
+   {{if ne .Modal 1}}
+<header id="page-topbar" style="border:1px solid #E5E5E5 !important;box-shadow:5px 5px 10px #e8e8e8,-5px -5px 10px #ffffff;">
+    <!-- making lienaer greand in background on header bar using the sytle shheret -->
+    <div class="navbar-header bg">
+      <div class="d-flex">
+        <!-- LOGO -->
+        <button type="button" class="btn btn-sm  text-white font-size-24 header-item waves-effect" id="vertical-menu-btn"> <i class="fa-solid fa-layer-group" style="border: unset !important;"></i> </button>
+        <div class="d-flex text-center">
+          <div class="navbar-brand-box"> <span class="logo-lg"><img src="{{.LogoLight}}" alt="Logo" class="img-fluid header-img"> </span> </div>
+        </div>
+        <!-- App Search-->
+      </div>
+      <div class="d-flex">
+        <div class="dropdown d-inline-block d-lg-none ml-2">
+          <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> </button>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0" aria-labelledby="page-header-search-dropdown">
+            <form class="p-3">
+              <div class="form-group m-0">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                  <div class="input-group-append">
+                    <button class="btn btn-danger" type="submit"><i class="mdi mdi-magnify"></i></button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="dropdown d-inline-block" id="load_div">
+          <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <!--<i class="mdi mdi-bell-outline" style="color:white;"></i>-->
+          <span class="badge badge-danger badge-pill" style="right: 0; color:white !important ">
+          <!-- 100 -->
+          </span></button>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0" aria-labelledby="page-header-notifications-dropdown">
+            <div class="p-3">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="m-0 font-weight-medium text-uppercase">Notifications </h6>
+                </div>
+                <div class="col-auto"> <span class="badge badge-pill badge-primary">New
+                                  </span> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown-center mx-2 mb-1">
+                  <button class="btn btn-outline-light  mt-3 text-start mx-1" data-bs-toggle="dropdown" aria-expanded="false"> {{ if .AdminData }} {{ .AdminData.AdminName }} {{end}}
+                    <i class="fa-solid fa-circle-chevron-down fa-fw"></i></button>
+                  <ul class="dropdown-menu bg-light-subtle px-2" style="width:200px !important;">
+            <li class="text-start text-white mx-0 botder bg-danger rounded p-2">{{ if .AdminData }} {{ .AdminData.AdminEmail }} {{ .AdminData.AdminRole }} {{end}}
+              <!-- <div>ITIO Innovex</div> -->
+                        </li>
+            <li><a class="dropdown-item" href="/admin/profile" title="Profile"><i class="fa-solid fa-user fa-fw"></i> Profile</a> </li>
+            <li><a class="dropdown-item" href="/admin/login-history" title="Login History"><i class="fa-solid fa-circle-info  fa-fw"></i> Login History</a></li>
+            <li><a class="dropdown-item" href="/admin/change-password" title="Change Password"><i class="fa-solid fa-key fa-fw"></i> Change Password</a></li>
+            <li><a class="dropdown-item" href="/admin/logout" title="Logout"><i class="fa-solid fa-right-from-bracket fa-fw"></i> Sign Out</a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ========== Left Sidebar Start ========== -->
+  <div class="vertical-menu">
+    <div data-simplebar class="h-100 sidebar-color111 " >
+      <!--- Sidemenu -->
+      <div id="sidebar-menu">
+        <!-- Left Menu Start -->
+  
+        <ul class="metismenu list-unstyled side-menu m-2 border rounded">
+          <li class="list-item list-item-selected"><a href="/admin/"> <i class="fa-solid fa-warehouse fa-fw"></i> <span>Dashboard</span></a></li>
+        </ul>
+      
+        <ul class="metismenu list-unstyled side-menu m-2 border rounded" >
+        <!-- <li class="menu-title" style="color:White ">Menu</li> -->
+          
+          
+          <li class="list-item "><a href="/admin/transactions"><i class="fa-solid fa-rectangle-list fa-fw"></i> <span>Transactions</span></a></li>
+          <li class="list-item "><a href="/admin/withdraw-list"><i class="fa-solid fa-coins fa-fw"></i> <span>Withdraw</span></a></li>
+          <li class="list-item "><a href="/admin/revenue"><i class="fa-solid fa-wallet fa-fw"></i> <span>Revenue</span></a></li>
+          <li class="list-item "><a href="/admin/invoice-list"><i class="fa-solid fa-file-invoice-dollar fa-fw"></i> <span>Requested Payment</span></a></li>
+          <li class="list-item "><a href="/admin/coin-list"><i class="fa-brands fa-bitcoin fa-fw"></i> <span>Coin /Address </span></a></li>
+          <li class="list-item "><a href="/admin/crypto-currency"><i class="fa-brands fa-bitcoin fa-fw"></i> <span>Crypto Currency</span></a></li>
+          <li class="list-item "><a href="/admin/currency"><i class="fa-solid fa-circle-dollar-to-slot fa-fw"></i> <span>Fiat Currency</span></a></li>
+          <li class="list-item "><a href="/admin/members"><i class="fa-solid fa-users fa-fw"></i> <span>Members</span></a></li>
+          <li class="list-item "><a href="/admin/coinid"><i class="fa-solid fa-right-left"></i> <span>Exchange Coin ID</span></a></li>
+          <li class="list-item "><a href="/admin/developer-guide"><i class="fa-solid fa-code"></i> <span>Developer Guide</span></a></li>
+          <li class="list-item "><a href="/admin/support-ticket"><i class="fa-solid fa-envelope fa-fw"></i> <span>Support Ticket</span></a></li>
+          <li class="list-item "><a href="/admin/email-template"><i class="fa-solid fa-envelope-open fa-fw"></i> <span>Email Template</span></a></li>
+          <li class="list-item "><a href="/admin/acquirer"><i class="fas fa-handshake fa-fw"></i> <span>Acquirer</span></a></li> 
+          <li class="list-item "><a href="/admin/admin-manager"><i class="fa-solid fa-user-gear fa-fw"></i> <span>Admin Manager</span></a></li>
+          <!-- 
+          <li class="list-item "><a href="/admin/fireblocks-users"><i class="fa-solid fa-user-gear fa-fw"></i> <span>Fireblocks Users</span></a></li>
+          <li class="list-item "><a href="/admin/vault-accounts"><i class="fa-solid fa-user-gear fa-fw"></i> <span>Fireblocks Volt A/c</span></a></li>
+          <li class="list-item "><a href="/admin/vault"><i class="fa-solid fa-user-gear fa-fw"></i> <span>Fireblocks Wallet</span></a></li> 
+          -->
+        </ul>
+        <div> </div>
+      </div>
+      <!-- Sidebar -->
+    </div>
+  </div>
+ 
+  {{else}}
+  <style>
+  body[data-layout=horizontal] .page-content {
+    margin-top: 0px !important;
+    padding: calc(0px + 24px) calc(21px / 2) 20px calc(24px / 2) !important;
+}
+</style>
+  {{end}}
+  <script src="/views/js/metismenu/metisMenu.min.js"></script>
+  <script src="/views/js/dist/app.js"></script>
+  
+  

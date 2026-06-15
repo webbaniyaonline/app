@@ -1,0 +1,116 @@
+{{template "partials/admin-header" .}}
+<style>
+    .img-icon { width: 40px;margin-right: 10px;}
+    </style>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+         
+
+          <div class="row">
+            <div class="col-lg-12">
+                <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}}</span></h4>
+            </div>
+            
+      </div>
+  
+      {{if .AlertX}}
+      <div class="row mx-0">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{.AlertX}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+      {{end}}
+    
+
+          
+            <div class="row border border-info p-2 m-1 rounded">
+                    <div class="col-sm-6"><strong>Transaction ID :</strong> {{.TransData.Transaction_id}}</div>
+                    <div class="col-sm-6 "><strong>Timestamp :</strong> {{.TransData.Createdate}}</div>
+                    <div class="col-sm-6"><strong>Assetid :</strong> {{.TransData.Assetid}}</div>
+                    <div class="col-sm-6"><strong>Destination address :</strong> <a class="text-break" href="{{.AddressUrl}}{{.TransData.Destinationaddress}}" target="_blank" title="View Details"><i class="fa-solid fa-square-arrow-up-right"></i> {{.TransData.Destinationaddress}}</a></div>
+                    <div class="col-sm-6" ><strong>Requested Amount :</strong> <span class="text-uppercase">{{.TransData.Requestedcurrency}} {{.TransData.Requestedamount}} </span></div>
+                    <div class="col-sm-6"><strong>Converted Amount :</strong> <span class="text-uppercase">{{.TransData.Receivedcurrency}} {{.TransData.Convertedamount}}</span> </div>
+                    <div class="col-sm-6 "><strong>Status :</strong> {{if eq .TransData.Status "Success"}}<span class="badge text-bg-success">Success</span>{{else if eq .TransData.Status "Waiting"}}<span class="badge text-bg-warning">Waiting</span>{{else}}<span class="badge text-bg-danger">Failed</span>{{end}}</div>
+                    <div class="col-sm-6 "><strong>Received Amount :</strong> <span class="text-uppercase">{{.TransData.Receivedcurrency}} {{.TransData.Receivedamount}} </span></div>
+                    <div class="col-sm-6"><strong>Approved By :</strong> {{.TransData.Approved_by}} {{.TransData.Approver_id}}</div>
+                    <div class="col-sm-6"><strong>Approved Date :</strong> {{.TransData.Approved_date}}</div>
+                    <div class="col-sm-12"><strong>Trans Type :</strong> {{.TransData.Transaction_type}}</div>
+                    <div class="col-sm-12"><strong>Txhash :</strong> {{.TransData.Response_hash}}</div>
+                    <div class="col-sm-12"><strong>Comment :</strong> {{.TransData.Approver_comment}}</div>
+                    <div class="col-sm-12"><strong>Note :</strong> {{.TransData.Note}} IP : - {{.TransData.Ip}}</div>
+                    
+                  </div>
+           
+          
+
+ {{if ne .TransData.Status "Success"}}
+      <form method="POST" class="border border-warning p-2 mx-1 my-2 rounded" action="/admin/transApprovalPost" autocomplete="off">
+      <input type="hidden" name="tableID" value="{{.TransData.Id}}">
+      
+        <div class="row">
+            <h4 class="header-title my-2">Submit By Approver </h4>
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="txhash" name="txhash" class="form-control" title="Transaction Hash" required="" >
+              <label for="txhash">Transaction Hash</label>
+            </div>
+          </div>
+
+          {{if and (ne .TransData.Transaction_type "Withdraw Fee") (ne .TransData.Transaction_type "Withdraw")}}
+
+          <div class="col-md-3 my-2">
+            <div class="form-floating">
+              <input type="text" id="receivedamount" name="receivedamount" class="form-control" title="Received Amount" required="" >
+              <label for="receivedamount">Received Amount</label>
+            </div>
+          </div>
+          {{else}}
+          <input type="hidden" name="trackID" value="{{.TransData.Transaction_id}}">
+          {{end}}
+        
+      
+
+          <div class="col-md-3 my-2">
+            <div class="form-floating">
+              <select class="form-select" name="status" id="status" title="status" required="">
+                <option value="0">Waiting</option>
+                <option value="1">Full Pay</option>
+                <option value="2">Over Pay</option>
+                <option value="3">Under Pay</option>
+                <option value="8">Decline</option>
+                <option value="9">Dispute</option>
+              </select>
+              <label for="status">Status</label>
+            </div>
+          </div>
+
+          <div class="col-md-12 my-2">
+            <div class="form-floating">
+              <input type="text" id="approver_comment" name="approver_comment" class="form-control" title="Comment" required="" >
+              <label for="approver_comment">Comment</label>
+            </div>
+          </div>
+          
+          <div class="col-md-12 my-2 text-end">
+            
+          <button type="submit" id="submit" class="btn btn-primary mt-1" name="submit" title="submit" value="submit">Submit</button>
+        
+    </div>
+        </div>
+        
+      </form>
+  {{end}}  
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/admin-footer" .}}

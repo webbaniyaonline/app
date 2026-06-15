@@ -1,0 +1,148 @@
+{{template "partials/header" .}}
+<style>
+    .img-icon { width: 40px;margin-right: 10px;}
+    </style>
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{.Title}} - {{.Action}}</h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <div class="col-lg-12 text-end my-2"> <a href="/add-crypto-wallet" class="btn btn-sm btn-primary-600" title="Add New Ticket"><i class="ri-add-line"></i> Add Settlement Wallet</a></div>
+    
+  </li>
+ 
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+   
+  
+      {{if .Alert}}
+      <div class="row mx-0">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{.Alert}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+      {{end}}
+      {{if eq .Action "List"}}
+
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0 bordered-table xsm-table">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">Code</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Network</th>
+                  <th scope="col">{{.Title}}</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-end mx-2">Action</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .CurrencyList}}
+                  <tr>
+                    <td class="text-uppercase">{{.Crypto_code}}</td>
+                    <td class="text-capitalize">{{.Crypto_title}}</td>
+                    <td>{{.Crypto_network}}</td>
+                    <td>{{.Crypto_address}}</td>
+                    <td>{{if eq .Status 1}} <i class="ri-checkbox-circle-line text-success fs-3"></i> {{else}} <i class="ri-close-circle-line text-danger fs-3"></i> {{end}}</td>
+                    <td class="text-end mx-2"><a class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center" href="/crypto-wallet/edit/{{.Wallet_id}}" title="Edit Address"><iconify-icon icon="lucide:edit"></iconify-icon></a> <a class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center" href="/crypto-wallet/delete/{{.Wallet_id}}" title="Delete Address"><iconify-icon icon="mingcute:delete-2-line"></iconify-icon></a></td>
+                  </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end mx-2 fs-6" colspan="8"> 
+                    <span class="mt-1 font-monospace mx-4 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:backward" width="32" height="32" title="Previous Page"></iconify-icon></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-4 float-start"><iconify-icon icon="zondicons:forward" width="32" height="32" title="Next Page"></iconify-icon></a>
+                  {{ end }}
+
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+           
+          </div>
+
+      {{else}}
+    {{ if .EditData }} {{ .EditData.Crypto_title }} {{ .EditData.Crypto_title }} {{end}}
+      <form method="POST" action="/cryptoWalletPost" autocomplete="off" enctype="multipart/form-data">
+      <input type="hidden" name="tableID" value="{{if .EditData.Wallet_id}}{{.EditData.Wallet_id}}{{end}}">
+      <input type="hidden" name="mode" value="{{.Action}}">
+      <input type="hidden" id="crypto_title" name="crypto_title" value="{{if .EditData.Crypto_title}}{{.EditData.Crypto_title}}{{end}}">
+      <input type="hidden" id="crypto_id" name="crypto_id" value="{{if .EditData.Assetid}}{{.EditData.Assetid}}{{end}}">
+        <div class="row">
+        
+         
+
+        
+          <div class="col-md-6 my-2  py-4">
+            
+            <div class="form-floating">
+                <select class="form-select" name="crypto_code" id="crypto_code" title="Crypto Code" required="" onchange="fetchnetwork()">
+                <option value="" >Select</option>
+                {{range .CurrencyList}}
+                <option value="{{.Coin}}" data-title="{{.Coin_title}}" {{if eq .Coin $.EditData.Crypto_code}} selected {{end}}  >{{.Coin}} - {{.Coin_title}}</option>
+                {{end}}
+                </select>
+                <label for="crypto_code">Select Crypto Code</label>
+              </div>
+          </div>
+          <div class="col-md-6 my-2  py-4">
+            
+            <div class="form-floating">
+                <select class="form-select" name="crypto_network" id="crypto_network" title="Crypto Network" required="" onchange="getcid()">
+                <option value="" >Select</option>
+                {{if .EditData.Crypto_network}}
+                <option value="{{.EditData.Crypto_network}}" selected >{{.EditData.Crypto_network}}</option>
+                {{end}}
+
+                </select>
+                <label for="crypto_network">Select Crypto Network</label>
+              </div>
+          </div>
+          <div class="col-md-6 my-2  py-4">
+            <div class="form-floating">
+                <input type="text" id="crypto_address" class="form-control" name="crypto_address" required value="{{if .EditData.Crypto_address}}{{.EditData.Crypto_address}}{{end}}">
+              <label for="status">{{.Title}}</label>
+              
+            </div>
+          </div>
+
+          <div class="col-md-6 my-2  py-4">
+            <div class="form-floating">
+              <select class="form-select" name="status" id="status" title="Status" required="">
+              <option value=1 {{ if eq .EditData.Status 1 }}selected{{end}}>Active</option>
+              <option value=2 {{ if eq .EditData.Status 2 }}selected{{end}}>Deleted</option>
+              </select>
+              <label for="status">Status</label>
+              
+            </div>
+          </div>
+          
+          <div class="col-md-2 my-2  py-4">
+            <div class="form-floating">
+          <button type="submit" id="submit" class="btn btn-primary btn-sm " name="submit" title="submit" value="submit">Submit</button>
+        </div>
+    </div>
+        </div>
+        
+      </form>
+      {{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> 
+
+  {{template "partials/footer" .}}

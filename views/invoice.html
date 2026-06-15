@@ -1,0 +1,114 @@
+{{template "partials/header" .}}
+<style>
+    .account-pages {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+.account-pages .box {
+    max-width: 600px !important;
+    margin: 0 auto;
+}
+.img-icon { width: 30px;margin-right: 10px;}
+.img-icon-box { max-width: 30px;}
+</style>
+
+
+
+
+<script src="/views/js/dist/jquery-qrcode.js"></script>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}} </span></h4>
+          <div class="my-1">
+            {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}} 
+            <div class="account-pages">
+                <div class="box">
+                    <div class="card form bg-secondary-subtle shadow">
+                        <div class="card-body">
+                <form method="POST" id="paymentForm" action="/invoicePost" autocomplete="off">
+                    <div class="row" id="first">
+                    
+                      <div class="col-md-6 my-2">
+                        <div class="form-floating">
+                          <select class="form-select" name="price_currency" id="price_currency" title="Price Currency" required="">
+                          <option value="" >Select</option>
+                          {{range .CurrencyList}}
+                          <option value="{{.Currency_code}}" >{{.Currency_code}}</option>
+                          {{end}}
+                          </select>
+                          <label for="price_currency">Select Price Currency</label>
+                          
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6 my-2">
+                        <div class="form-floating">
+                          <input type="text" id="price_amount" name="price_amount" class="form-control" title="Amount" value="100.00" required=""  >
+                          <label for="price_amount">Amount</label>
+                        </div>
+                      </div>
+
+                    
+                 
+                      <div class="col-md-6 my-2">
+                        <div class="form-floating">
+                          <input type="text" id="sender_name" name="sender_name" class="form-control" title="Sender Name" value="vikash" required="" >
+                          <label for="order_description">Sender Name</label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 my-2">
+                        <div class="form-floating">
+                          <input type="email" id="sender_email" name="sender_email" class="form-control" title="Sender Email" value="vikashg@itio.in" required="" >
+                          <label for="sender_email">Sender Email</label>
+                        </div>
+                      </div>
+                     
+                     
+
+                        <div class="col-md-12 my-2">
+                            <div class="form-floating">
+                              <input type="text" id="order_description" name="order_description" class="form-control" title="Description" value="Test Desc" required="" >
+                              <label for="order_description">Description</label>
+                            </div>
+                          </div>
+                      
+
+    
+                          <div class="col-md-12 my-2">
+                          <button type="submit" id="submit" class="btn btn-outline-primary w-100 template step1" name="submit" title="submit" value="submit">Pay Now</button>
+                      </div>
+                    </div>
+
+
+                  
+
+                
+                    
+                  </form>
+                </div></div>
+
+                </div>
+             </div>     
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/footer" .}}
+
+

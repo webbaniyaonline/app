@@ -1,0 +1,181 @@
+{{template "partials/header" .}}
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{ .Title }}</h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <a href="/" class="d-flex align-items-center gap-1 hover-text-primary">
+      <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+      Dashboard
+    </a>
+  </li>
+  <li>-</li>
+  <li class="fw-medium">{{ .Title }}</li>
+</ul>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+            <h6 class="mb-2 fw-bold text-lg mb-0">Use an Authenticator app</h6>
+            <p>Download the free <a href="https://support.google.com/accounts/answer/1066447?hl=en" title="Move to Google Authenticator" target="_blank" class="fw-bold text-primary-400">Google Authenticator</a> app, add a new account than scan this barcode to setup your account</p>
+         <div class="maindiv" style="max-width: 400px !important;margin: 0 auto;">
+            <div class="row mx-0">
+            <div class="w-50 px-0"><span class="btn btn-outline-success py-4 text-sm w-100 Activated" data-tid="1">Scan barcode instead</span></div>
+            <div class="w-50 px-0"><span class="btn btn-outline-secondary py-4 text-sm  w-100 Activated" data-tid="2">Enter Code Manually</span></div></div>
+            <div class="div001 mt-4 border rounded p-4 bg-body-secondary">
+		   <div class="text-center mt-4"><img src="data:image/png;base64,{{.Qrimage}}" class="img-thumbnail" alt="..." title="Scan this QR code with Google Authenticator" /></div>
+           <h6 class="mb-2 fw-bold text-sm text-center mt-4">Scan this QR code with Google Authenticator</h6>
+        </div>
+        <div class="div002 mt-4 border rounded p-4 bg-body-secondary" style="display: none;">
+           
+           <div class="text-center mt-4">
+           
+          <span class="col float-start py-4" >
+          <a class="col btn btn-outline-primary-600 py-4 text-sm" style="margin-left: 40px;" id="skey">{{.Secret}}</a>
+        </span>
+          <span class="col float-start py-0"><iconify-icon icon="solar:copy-bold" class="float-start text-warning  mt-4" width="32" height="32" title="Click to copy" onclick="CopyToClipboard('#skey')"></iconify-icon></span>
+        
+            </div>
+            <div class="clearfix"></div>
+            <div class="mb-2 fw-bold text-sm text-center mt-4">Enter this secret manually</div>
+
+        </div>
+        <div class="float-end"><button type="button" class="btn btn-success-600 radius-8 px-20 py-4 my-4 d-flex align-items-center gap-2 process2"> 
+            I have saved my backup code <iconify-icon icon="mingcute:square-arrow-right-line" class="text-xl"></iconify-icon> 
+          </button></div>
+        </div>
+        <form id="myForm">
+          <input type="hidden" name="secret" id="secretv" value="{{.Secret}}">
+          <input type="hidden" name="qrimg" id="qrimgv" value="data:image/png;base64,{{.Qrimage}}">
+
+        <div class="processdiv" style="max-width: 400px !important;margin: 0 auto; display: none;"> 
+            
+            <div class="div004 mt-4 border rounded p-4 bg-body-secondary">
+                <div class="mb-2 fw-bold text-sm text-center mt-4">Please enter your 6-digit authentication code from the Google Authenticator app.</div>
+                <div class="text-center mt-4">
+                <div id="msgbox" class="text-danger fw-bold"></div>
+               <span class="col py-4" >
+               <input type="number" class="form-control text-center" name="code" id="codev" title="Enter your 6 Digit Authentication Code"  placeholder="******" min="100000" max="999999" maxlength="6" 
+               oninput="if(this.value.length > 6) this.value = this.value.slice(0, 6);" required="">
+             </span>
+             
+                 </div>
+                 <div class="clearfix"></div>
+                 
+     
+             </div>
+
+            <div class="">
+                <button type="submit" class="float-end btn btn-success-600 radius-8 px-20 py-4 my-4 d-flex align-items-center gap-2 match-2fa"> 
+                Continue <iconify-icon icon="mingcute:square-arrow-right-line" class="text-xl"></iconify-icon> 
+              </button>
+              <button type="button" class=" float-end btn btn-warning-600 radius-8 px-20 py-4 my-4 d-flex align-items-center gap-2 processback"> 
+                Back <iconify-icon icon="mingcute:square-arrow-left-line" class="text-xl"></iconify-icon> 
+              </button>
+            
+            </div>
+        </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+  {{template "partials/footer" .}}
+  <script>
+
+$('.Activated').on('click', function () {
+    var dataTid=$(this).attr('data-tid');
+//alert(dataTid)
+ if(dataTid==1){
+    $(".div001").show();$(".div002").hide();
+ }else if(dataTid==2){
+    $(".div001").hide();$(".div002").show();
+ }else{
+    alert(3) 
+ }
+});
+$('.process2').on('click', function () {
+     $(".maindiv").hide();$(".processdiv").show();
+})
+$('.processback').on('click', function () {
+     $(".maindiv").show();$(".processdiv").hide();
+})
+// For Match 2fa
+
+$('.match-2fa').on('click', function () {
+
+var code=$('#codev').val();
+
+    //alert(code);
+
+    
+
+     if(code==''){
+
+         alert('Please enter 123456');
+
+         return false;
+
+     }else if($.trim(code).length != 6){
+
+         alert('Please enter 6 digit number');
+
+         return false;
+
+     }else if(!$.isNumeric(code)){
+
+         alert('Please enter Numeric Value');
+
+         return false;
+
+     }
+
+      // Prevent default form submission
+      event.preventDefault();
+
+// Get form data
+var formData = {
+  secret: $("#secretv").val(),
+  qrimg: $("#qrimgv").val(),
+  code: $("#codev").val(),
+};
+
+// Send AJAX POST request
+$.ajax({
+    type: "POST",
+    url: "/activate-2fa",
+    data: JSON.stringify(formData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(response) {
+      // Convert response object to a string
+      var stringifiedResponse = JSON.stringify(response);
+      // Parse the stringified response back to an object
+      var parsedResponse = JSON.parse(stringifiedResponse);
+
+      // Access individual data
+      var message = parsedResponse.message;
+      var status = parsedResponse.status; 
+     // alert(message)
+      //alert(status)
+      if(status==200){
+        window.location.href = "/profile";
+      }else{
+        $("#msgbox").html("Error : " +message)
+      }
+      
+    },
+    error: function(err) {
+        console.log("Error: ", err);
+    }
+});
+
+
+
+    }) 
+  </script>
+  

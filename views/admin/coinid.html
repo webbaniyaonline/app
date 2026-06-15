@@ -1,0 +1,86 @@
+{{template "partials/admin-header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+  </style>
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}}</span></h4>
+                <p>If the currency exchange does not work on the checkout page, pass the coin ID to the function page along with the currency condition</p>
+                </div>
+                <div class="col-lg-6 text-end my-2"> </div>
+          </div>
+            {{if .AlertX}}
+            <div class="alert alert-warning alert-dismissible fade show my-2" role="alert">
+              <strong>{{.AlertX}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{end}}
+            <form method="get" >
+              <div class="row  bg-light border rounded mb-2 py-2 mx-2" >
+                    
+                <div class="col-md-4 my-2">
+                  
+                    <input type="text" name="search" id="search" class="form-control form-control-sm" placeholder="Search Keywords" value="{{ .Search }}" title="Search Keywords">
+                    
+                </div>
+              
+
+                <div class="col-md-2 my-2">
+                    <button type="submit" class="btn btn-primary btn-sm ms-2 float-start" style="width:36px;" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+               
+              </div>
+          </form>
+            <div class="accordion m-2" id="accordionExample">
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">ID</th>
+                  <th scope="col">Coin ID</th>
+                  <th scope="col">Symbol</th>
+                  <th scope="col">Name</th>
+                 
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .CoinList}}
+                  {{ $dataContext := . }}
+                <tr>
+                    <td>{{.Id}}</td>
+                    <td class="text-primary fw-bold">{{.Coin_id}}</td>
+                    <td>{{.Symbol}}</td>
+                    <td>{{.Name}}</td>
+         
+                </tr>
+             
+                {{end}}
+                
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/admin-footer" .}}
+

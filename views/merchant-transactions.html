@@ -1,0 +1,168 @@
+{{template "partials/header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+  </style>
+
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{ .Title }}</h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <a href="/pay-links" title="Create Pay Link" class=""><iconify-icon icon="flat-color-icons:plus" width="32" height="32"></iconify-icon></a> <a href="/pdf" title="Download PDF" class=""><iconify-icon icon="vscode-icons:file-type-pdf2" width="32" height="32"></iconify-icon></a> <a href="/excel-download" title="Download Excel" class=""><iconify-icon icon="vscode-icons:file-type-excel2" width="32" height="32"></iconify-icon></a>
+    
+  </li>
+  
+</ul>
+</div>
+  
+  <!-- Crypto Home Widgets Start -->
+
+  <div class="row gy-4 mt-4">
+    <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+           
+          {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show my-2" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}}
+            {{template "partials/search-form" .}}
+            {{if ge  .Total 1}}
+            <div class="accordion mt-2" id="accordionExample">
+          <div class="table-responsive scroll-sm">
+            <table class="table table-centered table-nowrap mb-0 bordered-table xsm-table">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+                  <th scope="col">TransactionID</th>
+                  <th scope="col">Asset</th>
+                  <th scope="col" title="Requested Fiat Amount">Requested</th>
+                  <th scope="col" title="Converted Crypto Amount">Converted</th>
+                  <th scope="col" title="Received Crypto Amount">Received</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .TransactionList}}
+                  {{ $dataContext := . }}
+                  <tr>
+                    <td ><span class="accordion-button88" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{.Id}}" aria-expanded="false" aria-controls="collapse{{.Id}}"><iconify-icon icon="lets-icons:view-duotone" width="30" height="30"></iconify-icon></span></td>
+                    <td><span class="d-inline-block text-truncate" style="max-width: 150px;"></span>{{.Transaction_id}}</td></td>
+                    <td >{{range index $.CoinList}}{{if eq $dataContext.Assetid .Coin_id}}
+                      <img src="/views/images/{{tolower $dataContext.Receivedcurrency}}.png" alt="{{$dataContext.Receivedcurrency}}" title="{{toupper $dataContext.Receivedcurrency}}" class="w-40-px h-40-px rounded-circle flex-shrink-0">
+                      {{if ne (tolower .Coin_network) $dataContext.Receivedcurrency}}
+                      <img src="/views/images/{{tolower .Coin_network}}.png" alt="{{.Coin_network}}" title="{{.Coin_network}}" class="w-40-px h-40-px rounded-circle flex-shrink-0 crypto-pair">
+                      {{end}}
+                    </td>
+                     
+                      <!-- <img src="/views/images/{{.Icon}}" alt="" class="w-40-px h-40-px rounded-circle flex-shrink-0"> <span class="text-uppercase">{{$dataContext.Receivedcurrency}}</span>  <span class="badge text-bg-danger">{{.Coin_network}}</span>--> {{end}}{{end}}</td>
+                    <td class="text-uppercase">{{.Requestedcurrency}} {{.Requestedamount}}</td>
+                    <td class="text-uppercase">{{.Convertedcurrency}} <span class="balance-limit">{{.Convertedamount}}</span></td>
+                    <td class="text-uppercase">{{.Receivedcurrency}} <span class="balance-limit">{{.Receivedamount}}</span></td>
+                    <td>{{if eq .Transaction_type "Collection"}} 
+                      <span class="text-success-main bg-success-focus w-32-px h-32-px d-flex align-items-center justify-content-center rounded-circle text-xl">
+                       <iconify-icon icon="tabler:arrow-up-right" class="icon" title="{{.Transaction_type}}"></iconify-icon>
+                     </span>
+                     {{else}}
+                     <span class="text-danger-main bg-danger-focus w-32-px h-32-px d-flex align-items-center justify-content-center rounded-circle text-xl">
+                      <iconify-icon icon="tabler:arrow-down-left" class="icon" title="{{.Transaction_type}}"></iconify-icon>
+                     </span>
+                  {{end}}
+                </td>
+                    <td class="pay-status" >{{.Substatus}}</td>
+                    <td class="date-cell">{{.Createdate}}</td>
+                  </tr>
+                  <tr>
+                    <td class="m-0 p-0" colspan="9"> <div id="collapse{{.Id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div class="accordion-body border border-warning rounded p-4 ">
+                        <div class="rowx">
+                        <div class="col-sm-12 my-1"><strong>Transaction ID :</strong> {{.Transaction_id}}</div>
+                        {{if .Order_id}}
+                        <div class="col-sm-12 my-1"><strong>Order ID :</strong> {{.Order_id}}</div>
+                        {{end}}
+                        <div class="col-sm-12 my-1"><strong>Reference ID :</strong> {{.Customerrefid}}</div>
+                        <div class="col-sm-12 my-1"><strong>Timestamp :</strong> {{.Createdate}}</div>
+                        <div class="col-sm-12 my-1"><strong>Destination address :</strong> {{.Destinationaddress}}</div>
+                        <div class="col-sm-12 my-1"><strong>Assetid :</strong><span class=" text-uppercase">{{.Assetid}}</span></div>
+                        <div class="col-sm-12 my-1" ><strong>Requested Fiat Amount :</strong> <span class="text-uppercase">{{.Requestedcurrency}}</span> {{.Requestedamount}} </div>
+                        <div class="col-sm-12 my-1"><strong>Converted Crypto Amount :</strong> <span class="text-uppercase">{{.Convertedcurrency}}</span> {{.Convertedamount}} </div>
+                        <div class="col-sm-12 my-1"><strong>Received Crypto Amount :</strong> <span class="text-uppercase">{{.Receivedcurrency}}</span> {{.Receivedamount}} </div>
+                        <div class="col-sm-12 my-1"><strong>Status :</strong> {{.Status}}</div>
+                        <div class="col-sm-12 my-1"><strong>Txhash :</strong> {{.Response_hash}}</div>
+                        <div class="col-sm-12 my-1"><strong>Note :</strong> {{.Note}}</div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                    </td>
+                    </tr>
+                {{end}}
+                <tr>
+                  <td class="text-start fs-6 mx-2" colspan="9"> 
+                    <div>
+                    
+              
+
+                    <div class="p-8 bg-primary-50 d-inline-block radius-12 bg-primary-success-gradient justify-content-center mx-auto">
+                      <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                          <li class="page-item">
+                              <a class="page-link bg-base text-secondary-light fw-medium radius-8 border-0 px-20 py-10 d-flex align-items-center justify-content-center h-40-px" href="javascript:void(0)">Page [{{ .Page }}] Total {{ .Total }}</a>
+                          </li>
+                          {{ if gt .Page 1 }}
+                          <li class="page-item">
+                              <a class="page-link bg-base text-secondary-light fw-medium radius-8 border-0 px-20 py-10 d-flex align-items-center justify-content-center h-40-px w-40-px" href="?page={{ sub .Page 1 }}&searchKey={{ .SearchKey }}&searchBy={{ .SearchBy }}&status={{ .Status }}&date_1st={{ .Date_1st }}&date_2nd={{ .Date_2nd }}&limit={{ .Limit }}"><iconify-icon icon="ep:d-arrow-left" class="text-xl"></iconify-icon></a>
+                          </li>
+                          {{ end }}
+                          <li class="page-item">
+                              <a class="page-link bg-base text-secondary-light fw-medium radius-8 border-0 px-20 py-10 d-flex align-items-center justify-content-center h-40-px w-40-px" href="javascript:void(0)">{{ .Page }}</a>
+                          </li>
+                          {{ if lt (mul .Page .Limit) .Total }}
+                          <li class="page-item">
+                              <a class="page-link bg-base text-secondary-light fw-medium radius-8 border-0 px-20 py-10 d-flex align-items-center justify-content-center h-40-px w-40-px" href="?page={{ add .Page 1 }}&searchKey={{ .SearchKey }}&searchBy={{ .SearchBy }}&status={{ .Status }}&date_1st={{ .Date_1st }}&date_2nd={{ .Date_2nd }}&limit={{ .Limit }}"> <iconify-icon icon="ep:d-arrow-right" class="text-xl"></iconify-icon> </a>
+                          </li>
+                          {{ end }}
+                      </ul>
+                  </div>
+
+                    
+
+                    </div>
+
+                     
+ 
+                   
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+          {{else}}
+           <h5 class="m-2 text-center fw-bold">No Transaction Found</h5>
+          {{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+
+  {{template "partials/footer" .}}
+  {{template "partials/search-form-js" .}}
+

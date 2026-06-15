@@ -1,0 +1,248 @@
+{{template "partials/support-files" .}}
+<style>
+.img-icon { width: 25px;margin-right: 10px;}
+.img-icon-box { max-width: 45px;}
+.width-box {width: 100%;}
+.display-box-m{ display: none !important;}
+.display-box{ display: block !important;}
+.auth-left { padding-top: 50px !important; padding-left: 10px;}
+.auth {min-height: calc(100vh - 60px)  !important;}
+.process{    background: linear-gradient(#ffffff, #d7dae0) !important;border: solid 0.15em #7c7f853d !important;}
+.crypto-pairx {
+    margin-left: -20px !important;
+    height: 15px !important;
+    width: 15px !important;
+    margin-bottom: 15px !important;
+}
+@media (max-width: 992px) {
+    .auth-left { padding-top: 5px !important; width: 100% !important; padding-left: 0px; margin-left: 10px !important;margin-top: 10px !important;}
+    .desktop {margin-top: 24px !important;}
+    .desktop.px-48 {padding-left: 10px !important; padding-right: 10px !important;}
+    .table-responsive, .accordion {margin-bottom: 24px !important;}
+    .accordion .accordion-item { padding: 10 !important;}
+    .display-box-m{ display: block !important;}
+    .display-box{ display: none !important;}
+    
+}
+</style>
+<a id="CrypTox" href="{{$.CommonURL}}" data-cid="{{.InvoiceData.Client_id}}"  onclick="javascript:void(0)"></a>
+<section class="auth bg-base d-flex flex-wrap">  
+    <!-- Left Side Box -->
+    <div class="auth-left">
+        <div class="d-flex6 align-items-center flex-column h-100 justify-content-center ">
+          <!-- ///////////////////////////////////////// -->
+          <div class="desktop w-100 px-48">
+          <h6 class="mb-24  text-center width-box text-start text-secondary-light text-sm">Amount to pay</h6><!-- {{.InvoiceData.Product_name}} -->
+          <h6 class="text-center width-box text-start border-bottom pb-12"><span id="Requestedcurrency">{{.InvoiceData.Requestedcurrency}}</span> <span id="Requestedamount">{{.InvoiceData.Requestedamount}}</span></h6>
+          
+          <h6 class="mb-24  text-center width-box text-start text-secondary-light pt-3 text-sm display-box"><span id="Description">{{.InvoiceData.Description}}</span></h6>
+          <p class="text-md text-secondary-light mt-3 mb-2 card-title width-box display-box">Transaction summary</p>
+          
+          <div class="table-responsive width-box  display-box">
+              <table class="table bordered-table mb-0">
+                <thead>
+                  <tr>
+                    <th>{{.InvoiceData.Product_name}}</th>
+                    <th class="text-end">{{.InvoiceData.Requestedcurrency}} {{.InvoiceData.Requestedamount}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Total</td>
+                    <td class="text-end">{{.InvoiceData.Requestedcurrency}} {{.InvoiceData.Requestedamount}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          <div class="card-body display-box-m">
+           
+
+
+            <div class="accordion" id="accordionExample">
+                
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      View Details
+                    </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <h6 class="text-center width-box text-start text-secondary-light text-sm">{{.InvoiceData.Product_name}}</h6>
+                        <h6 class="text-center width-box text-start text-secondary-light  text-sm">{{.InvoiceData.Description}}</h6>
+                        <div class="table-responsive width-box">
+                            <table class="table bordered-table mb-0">
+                              <thead>
+                                <tr>
+                                  <th>1x {{.InvoiceData.Product_name}}</th>
+                                  <th class="text-end">{{.InvoiceData.Requestedcurrency}} {{.InvoiceData.Requestedamount}}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Total</td>
+                                  <td class="text-end">{{.InvoiceData.Requestedcurrency}} {{.InvoiceData.Requestedamount}}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+          </div>
+          
+          
+          
+          <!-- //////////////////////////////////////// -->
+        </div>
+
+    </div>
+
+    </div>
+    <!-- Right Side Box -->
+    <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
+        <div class="max-w-464-px mx-auto w-100">
+            
+              
+              <div class="card border">
+                <div class="card-header">
+                  <h5 class="card-title mb-0"><span class="badge text-sm fw-semibold w-24-px h-24-px d-flex justify-content-center align-items-center rounded-circle bg-primary-600  text-white float-start contactcolor">1</span> <span class="float-start mx-4"> Personal Information</span> <span class="float-end mx-2 editbtn" style="display: none;"> <iconify-icon icon="uil:edit" width="24" height="24"  style="color: #db1f32"></iconify-icon></span></h5>
+                </div>
+                <div class="card-body">
+                  <form class="row gy-3  pt-4 needs-validation was-validated contactform" novalidate="">
+                    <div class="col-md-12  mt-4">
+                      <div class="icon-field has-validation">
+                        <span class="icon">
+                          <iconify-icon icon="f7:person"></iconify-icon>
+                        </span>
+                        <input type="text" name="customername" id="customername" class="form-control form-control-sm" placeholder="Enter First Name" required="">
+                        
+                      </div>
+                    </div>
+                
+                    <div class="col-md-12  mt-1">
+                      <div class="icon-field has-validation">
+                        <span class="icon">
+                          <iconify-icon icon="mage:email"></iconify-icon>
+                        </span>
+                        <input type="email" name="customeremail" id="customeremail" class="form-control form-control-sm" placeholder="Enter Email Address" required="">
+                        
+                      </div>
+                    </div>
+                   <p class="text-xs text-secondary-light my-0">Get transaction updates and receipt notifications via email</p>
+                    <div class="col-md-12  mt-1">
+                      <button class="btn btn-primary-600 py-4 w-100 savecontact" type="button">Continue <span class="contact-loader"></span></button>
+                    </div>
+                  </form>
+                  <div class="contactdata" style="display: none;">
+                    <ul>
+                        <li class="d-flex align-items-center gap-1 mb-12">
+                            <span class="w-30 text-md fw-semibold text-primary-light">Full Name</span>
+                            <span class="w-70 text-secondary-light fw-medium">: <span class="cname"></span></span>
+                        </li>
+                        <li class="d-flex align-items-center gap-1 mb-12">
+                            <span class="w-30 text-md fw-semibold text-primary-light"> Email</span>
+                            <span class="w-70 text-secondary-light fw-medium">: <span class="cemail"></span></span>
+                        </li>
+                        </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card border mt-5" id="second">
+                <div class="card-header">
+                  <h5 class="card-title mb-0"><span class="badge text-sm fw-semibold w-24-px h-24-px d-flex justify-content-center align-items-center rounded-circle bg-light-600  text-white float-start paymentcolor">2</span> <span class="float-start mx-4"> Payment Method</span></h5>
+                </div>
+                <div class="card-body">
+                    {{range .CoinList}}
+                    <div class="row my-2 p-2 rounded-pill border border-dark pointer coin process" data-cid="{{.Coin}}" data-tid="{{.Coin_id}}" title="Create {{.Coin_title}} Payment" >
+                      <div class="col img-icon-box text-start px-0">
+                        <img class="img-icon" src="/views/images/{{.Icon}}">
+                        {{if ne .Coin .Coin_network}}
+                        <img src="/views/images/{{.Coin_network}}.png" alt="{{.Coin_network}}" title="{{.Coin_network}}" class="w-40-px h-40-px rounded-circle flex-shrink-0 crypto-pairx">
+                        {{end}}
+                      </div>
+                      <div class="col text-xs text-secondary-light pt-4"><strong>{{.Coin_title}}</strong> (<span class="text-uppercase">{{.Coin_network}}</span>)</div>
+                      <div class="col text-end text-xs text-secondary text-uppercase pt-4 coinLoader-{{.Coin_id}}">{{.Coin}}</div>
+                  </div>
+                    {{end}}
+                </div>
+              </div>
+              <div class="card border mt-5" id="third" style="display: none;">
+                <div class="card">
+                    <div class="card-body border">
+                        <div class="row border-bottom ">
+                            <div class="col text-start mb-2">
+                        <h5 class="card-title">Make your payment</h5>
+                    </div>
+                    <div class="col text-end">
+                        <div id="timer"></div>
+                    </div>
+                      </div>
+                      <div class="row">
+                        <div class="col text-center">
+                    <div class="qrcodes border rounded my-4 py-3 "></div>
+                </div>
+                <div class="col pt-3">
+                    <span class="m-1 fs-6 ">
+                        <div class="text-center mb-2">
+                     <img src="" id="coinicon" class=" px-2 " alt="..." style="height: 50px !important;"> 
+                    </div>
+                     <p class="text-sm text-secondary-light fw-normal">Only send <span  class="coincode text-uppercase"></span> to this address</p>
+                     <p class="text-center fs-6 fw-bold"><span id="getamountcoin1" class="text-uppercase"></span> <span class="coincode text-uppercase"></span></p>
+                    </span>
+                </div>
+                </div>
+                <div class="card-body border">
+                    <h5 class="card-title"><span  class="coincode text-uppercase"></span> Address</h5>
+                    <span class="text-truncate" style="max-width: 300px;" id="getaddress"></span><span><iconify-icon icon="solar:copy-bold" class="float-start text-warning ms-2  mt-4" width="16" height="16" title="Click to copy" onclick="CopyToClipboard('#getaddress')"></iconify-icon></span> 
+                    <h6 id="getnetworkid" class="btn btn-danger-600 radius-8 px-14 py-2 text-sm"></h6>
+                    <h5 class="card-title">Transaction ID</h5>
+                    <span id="transid"></span><span><iconify-icon icon="solar:copy-bold" class="float-start text-warning ms-2  mt-4" width="16" height="16" title="Click to copy" onclick="CopyToClipboard('#transid')"></iconify-icon></span>
+                  </div>
+                    </div>
+                    <div class="card-body">
+                                      
+                        <div id="statusbtn" class="text-end my-2" style="display: none;"><a id="failedlink" href="/success" class="btn btn-sm rounded-pill btn-outline-danger mx-1">Failed Transaction</a> <a id="successlink" href="/success-transaction" class="btn btn-sm rounded-pill btn-outline-success mx-1">Success Transaction</a></div>
+                      <div id="replyButton" class="text-end my-2 float-end" style="width: 80px;"><button type="button" class="btn btn-sm rounded-pill btn-outline-primary returnsecond"><i class="fa-solid fa-reply fa-fw mx-2"></i> Return</button></div> 
+                    
+                  </div>
+                  </div>
+        
+              </div>
+                
+              </div>
+    </div>
+</section>
+<div class="px-12 text-start bg-base w-100 text-secondary-light text-sm ">Powered by <img src="{{.LogoDark}}" alt="Logo" class="img-fluid img" style="max-height: 20px;"></div>  
+
+
+
+{{template "partials/footer" .}}
+<script src="/views/js/dist/jquery-qrcode.js"></script>
+<script src="/views/js/dist/checkout.js"></script>
+
+<script>
+ 
+ const invoiceEmail="{{.InvoiceData.Email}}";
+ const invoiceName="{{.InvoiceData.Name}}";
+         // store session
+           const get_sender_name = sessionStorage.getItem('sender_name');
+           const get_sender_email = sessionStorage.getItem('sender_email');
+            if (get_sender_name && get_sender_email) {
+                $('#customername').val(get_sender_name);
+                $('#customeremail').val(get_sender_email);
+                $('.savecontact').trigger("click");
+            }else if (invoiceEmail && invoiceName) {
+                $('#customername').val(invoiceName);
+                $('#customeremail').val(invoiceEmail);
+                $('.savecontact').trigger("click");
+            }
+
+
+
+</script>
+

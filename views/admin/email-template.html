@@ -1,0 +1,136 @@
+{{template "partials/admin-header" .}}
+<style>
+    .img-icon { width: 40px;margin-right: 10px;}
+    .jqte_tool.jqte_tool_1 .jqte_tool_label {
+     height: unset !important;
+    }
+    </style>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+         
+
+          <div class="row">
+            <div class="col-lg-8">
+                <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}} - {{.Action}}</span></h4>
+            </div>
+            <div class="col-lg-4 text-end my-2"> {{if eq .Action "List"}}<a href="/admin/add-email-template" title="Add Email Template" class="btn btn-sm btn-outline-primary">Add Email Template</a>{{end}}</div>
+      </div>
+  
+      {{if .AlertX}}
+      <div class="row mx-0">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{.AlertX}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+      {{end}}
+      {{if eq .Action "List"}}
+
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col">Template Subject</th>
+                  <th scope="col">Template Code</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-end mx-2">Action</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .DataList}}
+                  <tr>
+                    <td>{{.Template_subject}}</td>
+                    <td>{{.Template_code}}</td>
+                    <td>{{if eq .Status 1}} <i class="fa-regular fa-circle-check text-success"></i> {{else}} <i class="fa-regular fa-circle-xmark text-danger"></i> {{end}}</td>
+                    <td class="text-end mx-2"><a class="text-dark mx-2" href="/admin/email-template/edit/{{.Template_id}}" title="EDIT COIN"><i class="fa-solid fa-pen-to-square"></i></a> <a class="text-danger mx-2" href="/admin/email-template/delete/{{.Template_id}}" title="DELETE COIN"><i class="fa-solid fa-trash"></i></a></td>
+                  </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end mx-2 fs-6" colspan="8"> 
+                    <span class="mt-1 font-monospace mx-2 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-left"></i></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-right"></i></a>
+                  {{ end }}
+
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+           
+          </div>
+
+      {{else}}
+      <form method="POST" action="/admin/emailTemplatePost" autocomplete="off">
+      <input type="hidden" name="tableID" value="{{if .EditData.Template_id}}{{.EditData.Template_id}}{{end}}">
+      <input type="hidden" name="mode" value="{{.Action}}">
+      
+        <div class="row">
+        
+         
+
+        
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="template_subject" name="template_subject" class="form-control" title="Template Subject" required="" value="{{if .EditData.Template_subject}}{{.EditData.Template_subject}}{{end}}">
+              <label for="template_subject">Template Subject</label>
+            </div>
+          </div>
+          <div class="col-md-3 my-2">
+            <div class="form-floating">
+              <input type="text" id="template_code" name="template_code" class="form-control" title="Template Code" required="" value="{{if .EditData.Template_code}}{{.EditData.Template_code}}{{end}}">
+              <label for="template_code">Template Code</label>
+            </div>
+          </div>
+          <div class="col-md-3 my-2">
+            <div class="form-floating">
+              <select class="form-select" name="status" id="status" title="Status" required="">
+              <option value=1 {{ if eq .EditData.Status 1 }}selected{{end}}>Active</option>
+              <option value=2 {{ if eq .EditData.Status 2 }}selected{{end}}>Deleted</option>
+              </select>
+              <label for="status">Status</label>
+              
+            </div>
+          </div>
+          
+
+          <div class="col-md-12 my-2">
+            <div class="form-floating">
+              <textarea  id="template_desc" name="template_desc" class="form-control editor" required>{{if .EditData.Template_desc}}{{.EditData.Template_desc}}{{end}}</textarea>
+              <!-- <label for="template_desc">Template Description</label> -->
+            </div>
+          </div>
+         
+          <div class="col-md-12 my-2">
+            <div class="form-floating">
+          <button type="submit" id="submit" class="btn btn-primary btn  btn-primary  mt-1" name="submit" title="submit" value="submit">Submit</button>
+        </div>
+    </div>
+        </div>
+        
+      </form>
+      {{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+<link rel="stylesheet" type="text/css" href="https://jqueryte.com/css/jquery-te.css"/>
+<script src="https://jqueryte.com/js/jquery-te-1.4.0.min.js"></script>
+<script>
+	$('.editor').jqte();
+</script>
+
+  {{template "partials/admin-footer" .}}

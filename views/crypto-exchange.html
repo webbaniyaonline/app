@@ -1,0 +1,233 @@
+{{template "partials/header" .}}
+<style>
+  /* Optional styling */
+  select {
+    width: 250px;
+    padding: 5px;
+    font-size: 16px;
+  }
+
+  option {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .currency-option img {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+  }
+</style>
+<div class="dashboard-main-body">
+
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+<h6 class="fw-semibold mb-0">{{ .Title }} </h6>
+<ul class="d-flex align-items-center gap-2">
+  <li class="fw-medium">
+    <a href="/" class="d-flex align-items-center gap-1 hover-text-primary">
+      <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+      {{ .Title }}
+    </a>
+  </li>
+  <li>-</li>
+  <li class="fw-medium">{{ .Subtitle }}</li>
+</ul>
+ 
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="my-1">
+            {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}} 
+            
+             
+                
+           
+
+            <ul class="d-flex flex-wrap align-items-center gap-20 mt-20">
+            {{range .CoinBalanceList}}   
+                {{ $dataContext := . }}
+                  {{if gt .Balance "0"}}
+                 
+                  
+                          {{range index $.CoinList}} {{if eq $dataContext.Assetid .Coin_id}}
+                          
+                            <li class="text-secondary-light border radius-4 px-8 py-4 text-sm line-height-1 fw-medium d-flex align-items-center gap-1">
+                                <img src="/views/images/{{.Icon}}" class="w-40-px h-40-px rounded-circle flex-shrink-0" alt="">
+                                <span class="text-uppercase">{{.Coin}}</span> <span class="balance-limit">{{$dataContext.Balance}}</span>
+                            </li>
+                          {{end}}{{end}}
+                        
+                  {{end}}       
+            {{end}} 
+        </ul>
+            <div class="row gy-4 mt-4">
+
+              <div class="col-xxl-6">
+                <div class="col-12">
+                  <div class="card h-100">
+                    <div class="card-body p-24">
+                      <div class="tab-content" id="pills-tabContent">
+                          <div class="tab-pane fade show active" id="pills-Buy" role="tabpanel" aria-labelledby="pills-Buy-tab" tabindex="0">
+                            <form method="POST" id="paymentForm" action="/crypto-exchange-post" autocomplete="off">
+                                <div class="mb-20">  
+                                    <label for="price_amount" class="fw-semibold mb-8 text-primary-light">Crypto Amount</label>
+                                    <div class="input-group input-group-lg border input-form-light radius-8">
+                                        <input type="number"  min="0.01" max="10000000" step="0.01" class="form-control bg-base border-0 radius-8" id="price_amount" name="price_amount" placeholder="Crypto Amount" required="">
+                                        
+                                        
+                                        <div class="input-group-text bg-neutral-50 border-0 fw-normal text-md ps-1 pe-1">
+                                            <select class="text-uppercase form-select form-select-sm w-auto bg-transparent fw-bolder border-0 text-secondary-light" name="price_currency" id="price_currency" title="Enter Crypto Currency" required="">
+                                              <option value="">Select</option>
+                                              {{range .CoinBalanceList}}   
+                                                {{ $dataContext := . }}
+                                                    {{if gt .Balance "0"}}
+                                                        {{range index $.CoinList}} {{if eq $dataContext.Assetid .Coin_id}}
+                                              <option value="{{.Coin}}" myTag="{{$dataContext.Balance}}" data-title="{{.Coin_title}}">{{.Coin}}</option>
+                                                        {{end}}
+                                                    {{end}}
+                                                {{end}}       
+                                            {{end}} 
+                                              
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                              <div class="mb-3 text-center" id="msgbox"></div>  
+                            
+                           
+                              <div class="mb-2" id="CheckDiv">  
+                                <button type="button" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8 contact-loader" id="CheckExchangeValue"> Check Exchange Value</button>
+                                <!-- <button type="submit" id="submit" class="btn btn-primary text-sm btn-sm px-8 py-12 w-100 radius-8"> Create Now</button> -->
+                            </div>
+                            <div class="mb-2 row mx-2" id="SubmitDiv" style="display: none;">  
+                              <button type="button" class="btn btn-danger text-sm btn-sm px-8 py-12 w-25 radius-8" id="BackAct"> Back</button>
+                              <button type="submit" class="btn btn-success text-sm btn-sm px-8 py-12 w-75 radius-8" id="ConvertNow"> Convert Now</button>
+                            </div>
+                          </form>
+                          </div>
+                         
+                      </div>
+                      
+                  </div>
+                </div>
+               </div>
+              </div>
+              <div class="col-xxl-6">
+                <div class="" id="forgotModal" tabindex="-1" aria-hidden="true">
+                  <div class="">
+                      <div class="modal-content radius-16 bg-base">
+                      <div class="modal-body p-10 text-center">
+                          <div class="mb-32 text-center">
+                            <img src="/views/images/usdt.png" alt="Cart" style="height: 100px;">
+                          </div>
+                         
+                          <h6 class="mb-12">Convert Crypto Balance to USDT </h6>
+                          <p class="text-secondary-light text-sm mb-0">After submit details you can Convert your Crypto Balance to USDT </p>
+                          
+                      </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div>
+  {{template "partials/footer" .}}
+  <script>
+$('#BackAct').click(function(){
+  $("#msgbox").html("");
+  $("#price_amount").val("");
+  $("#price_currency").val("");
+  $("#CheckDiv").show();
+  $("#SubmitDiv").hide();
+  $(".contact-loader").html(' Check Exchange Value ');
+});
+  
+$('#CheckExchangeValue').click(function(){
+   
+   
+    var Amount = $("#price_amount").val();
+    var FromCurrency = $("#price_currency").find(':selected').attr('data-title');
+    var myTag = $("#price_currency").find(':selected').attr('myTag');
+    var cryptox = $("#price_currency").find(':selected').val()
+    var crypto =cryptox.toUpperCase()
+    var ToCurrency="tether";
+
+       if(Amount==''){
+        alert('Please enter crypto amount');
+        $( "#customername" ).focus();
+        return false;
+        }else if(FromCurrency==''){
+        alert('Please enter currency');
+        $( "#customeremail" ).focus();
+        return false;
+        }else if(parseFloat(Amount) > parseFloat(myTag)){
+        alert('Please enter amount equal to or less than your balance amount');
+        $( "#customeremail" ).focus();
+        return false;
+        }
+
+
+// Get form data
+var formData = {
+  amount: Amount,
+  fromCurrency: FromCurrency,
+  toCurrency: ToCurrency,
+};
+$(".contact-loader").html('<center><iconify-icon icon="svg-spinners:wind-toy" width="20" height="20"  style="color: #FFFFFF"></iconify-icon></center>');
+// Send AJAX POST request
+$.ajax({
+    type: "POST",
+    url: "/crypto-exchange-rate",
+    data: JSON.stringify(formData),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(response) {
+      // Convert response object to a string
+      var stringifiedResponse = JSON.stringify(response);
+      // Parse the stringified response back to an object
+      var parsedResponse = JSON.parse(stringifiedResponse);
+
+      // Access individual data
+      var message = parsedResponse.message;
+      var status = parsedResponse.status; 
+   
+      if(status==200){
+
+        var msg='<div class="alert alert-info bg-info-100 text-info-600 border-info-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 align-items-center justify-content-between" role="alert" >Converted Amount of ' + crypto + ' ' + Amount + ' to USDT <br>' + message + '</div>';
+        $("#msgbox").html(msg);
+        $("#CheckDiv").hide();
+        $("#SubmitDiv").show();
+      }else{
+      $("#msgbox").html("Error : " + message)
+      $(".contact-loader").html(' Check Exchange Value ');
+     // CheckDiv
+     // SubmitDiv
+      }
+      
+    },
+    error: function(err) {
+        console.log("Error: ", err);
+    }
+});
+
+
+
+});
+
+  </script>

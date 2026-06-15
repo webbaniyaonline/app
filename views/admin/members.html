@@ -1,0 +1,195 @@
+{{template "partials/admin-header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+  </style>
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}}</span></h4>
+                </div>
+                <div class="col-lg-6 text-end my-2"> </div>
+          </div>
+            {{if .AlertX}}
+            <div class="alert alert-warning alert-dismissible fade show my-2" role="alert">
+              <strong>{{.AlertX}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{end}}
+            <form method="get" >
+              <div class="row  bg-light border rounded mb-2 py-2 mx-2" >
+                    
+                <div class="col-md-5 my-2">
+                  
+                    <input type="text" name="search" id="search" class="form-control form-control-sm" placeholder="Search Keywords" value="{{ .Search }}" title="Search Keywords">
+                    
+                </div>
+                <div class="col-md-4 my-2">
+                 
+                    <select name="sort_by" id="sort_by" class="form-select form-select-sm" title="Search By">
+                  <option value="full_name" {{ if eq .SortBy "full_name" }}selected{{ end }}>	Name</option>
+                  <option value="username" {{ if eq .SortBy "username" }}selected{{ end }}>	Email</option>
+                  <option value="client_id" {{ if eq .SortBy "client_id" }}selected{{ end }}>ClientID</option>
+                    </select>
+                    
+                </div>
+
+                <div class="col-md-3 my-2" >
+                  <select name="status" id="status" class="form-select form-select-sm float-start" style="width:calc(100% - 90px);" title="Search By">
+                    <option value="">Select Status</option>
+                    <option value="1" {{ if eq .Order "1" }}selected{{ end }}>Active</option>
+                    <option value="0" {{ if eq .Order "0" }}selected{{ end }}>De Acitve</option>
+                      </select>
+                      <button type="submit" class="btn btn-primary btn-sm ms-2 float-start" style="width:36px;" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                      <a href="/admin/members" class=" btn btn-danger btn-sm ms-2 float-start" style="width:36px;" ><i class="fa-regular fa-circle-xmark" title="Remove search data"></i></a>
+              </div>
+                <!-- <div class="col-md-3 my-2">
+                  
+                    <select name="order" id="order" class="form-select form-select-sm float-start" style="width:calc(100% - 90px);" title="Select Order By">
+                  <option value="asc" {{ if eq .Order "asc" }}selected{{ end }}>Ascending</option>
+                  <option value="desc" {{ if eq .Order "desc" }}selected{{ end }}>Descending</option>
+                    </select>
+                    
+
+                </div> -->
+               
+              </div>
+          </form>
+            <div class="accordion m-2" id="accordionExample">
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead>
+                <tr class="font-weight-bolder">
+                  <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Timestamp</th>
+                  <th scope="col">Fees</th>
+                  <th scope="col" style="max-width: 30px !important;">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .MemberList}}
+                  {{ $dataContext := . }}
+                <tr>
+                  <td ><span class="accordion-button88" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{.Client_id}}" aria-expanded="false" aria-controls="collapse{{.Client_id}}"><i class="fa-solid fa-plus"></i></span></td>
+                  <td><a href="/admin/members-details/{{.Client_id}}" title="Merchant Details">{{.Full_name}}</a></td>
+                  <td>{{.Username}}</td>
+                  <td>{{if eq .Status 1}} <a title="Active" class="btn btn-sm btn-outline-success"><i class="fa-regular fa-circle-check text-success"></i> Active </a> {{else}} <a title="Active" class="btn btn-sm btn-outline-danger"><i class="fa-regular fa-circle-xmark text-danger"></i> DeActive </a> {{end}}</td>
+                  <td>{{.Timestamp}}</td>
+                  <td>{{range index $.FeeList}}{{if eq $dataContext.Client_id .Client_id}} <span>Min Amount - {{.Min_amount_fee}} <br> Percent Amount - {{.Amount_fee_in_percent}} % </span>{{end}}{{end}} </td>
+                  <td><a data-tid="{{.Client_id}}" data-cid="{{.Client_id}}" data-title="{{.Full_name}}" {{range index $.FeeList}}{{if eq $dataContext.Client_id .Client_id}} data-min="{{.Min_amount_fee}}" data-percent="{{.Amount_fee_in_percent}}" {{end}}{{end}} class="feedisplay btn btn-sm btn-primary mb-2" title="Click for Manage Fees"><i class="fa-solid fa-circle-plus"></i></a> {{if eq .Status 0}} <a href="/admin/member-status?key=1&mid={{.Client_id}}" class="btn btn-sm btn-success mb-2" ><i class="fa-regular fa-circle-check text-white" title="Click for Active"></i></a> {{else}}  <a href="/admin/member-status?key=0&mid={{.Client_id}}" class=" btn btn-sm btn-danger mb-2" ><i class="fa-regular fa-circle-xmark text-white" title="Click for DeActivate"></i></a> {{end}}</td>
+                </tr>
+                <tr>
+                  <td class="m-0 p-0" colspan="7"> <div id="collapse{{.Client_id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body border border-warning rounded ">
+                      <div class="row my-2">
+                      <div class="col-sm-4"><strong>Member ID :</strong> {{.Client_id}}</div>
+                      <div class="col-sm-4"><strong>Title :</strong> {{.Title}}</div>
+                      <div class="col-sm-4"><strong>Gender :</strong> {{.Gender}}</div>
+                      <div class="col-sm-4"><strong>Birth Date :</strong> {{.Birth_date}}</div>
+                      <div class="col-sm-4"><strong>Country Code :</strong> {{.Country_code}}</div>
+                      <div class="col-sm-4"><strong>Mobile :</strong> {{.Mobile}}</div>
+                      <div class="col-sm-4"><strong>Address Line1 :</strong> {{.Address_line1}}</div>
+                      <div class="col-sm-4"><strong>Address Line2 :</strong> {{.Address_line2}}</div>
+                    </div>
+                    </div></td>
+                  </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end fs-6 mx-2" colspan="7"> 
+                    <span class="mt-1 font-monospace mx-2 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-left"></i></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-right"></i></a>
+                  {{ end }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/admin-footer" .}}
+
+    <!-- Modal for Transaction Responce -->
+<div class="modal" id="feeDisplay">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Fees Management</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/admin/FeesPost" autocomplete="off" >
+          <input type="hidden" id="tableID" name="tableID" value="">
+          <input type="hidden" id="client_idx" name="client_id" value="">
+          <div class="col-md-12 my-2">
+              <div class="form-floating">
+                <input type="number" id="min_amount_fee" name="min_amount_fee" class="form-control" title="Minimum Amount Fee" value="{{if .EditFeeData.Min_amount_fee}}{{.EditFeeData.Min_amount_fee}}{{end}}">
+                <label for="min_amount_fee">Minimum Amount Fee</label>
+              </div>
+            </div>
+            <div class="col-md-12 my-2">
+              <div class="form-floating">
+                <input type="number" id="amount_fee_in_percent" name="amount_fee_in_percent" class="form-control" title="Amount Fee in Percent" value="{{if .EditFeeData.Amount_fee_in_percent}}{{.EditFeeData.Amount_fee_in_percent}}{{end}}">
+                <label for="amount_fee_in_percent">Amount Fee in Percent</label>
+              </div>
+            </div>
+
+            <button type="submit" id="submit" class="btn btn-sm btn-primary w-100" name="submit" title="submit" value="submit">Submit</button>
+
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal for Transaction Responce -->
+  <script>
+$('.feedisplay').click(function(){
+  var tid=$(this).attr('data-tid');
+  var cid=$(this).attr('data-cid');
+  var title=$(this).attr('data-title');
+  var text = $('#'+tid).html(); 
+  var min_amount=$(this).attr('data-min');
+  var percent_amount=$(this).attr('data-percent');
+
+  $('#fee_idx').val(tid)
+  $('#client_idx').val(cid)
+  
+  $('#min_amount_fee').val(min_amount)
+  $('#amount_fee_in_percent').val(percent_amount)
+
+  Modtitle="Fees - " + title
+
+  $('#feeDisplay').modal('show');
+    $('#feeDisplay .modal-title').html(Modtitle);
+  $('#feeDisplay .modal-body').html(text);
+  
+});
+
+  </script>
+

@@ -1,0 +1,120 @@
+{{template "partials/admin-header" .}}
+<style>
+.accordion-button {padding: unset !important;}
+.accordion-button:not(.collapsed) {
+  background-color: unset !important;
+  box-shadow: unset !important;
+  padding: 2px 2px !important;
+  height: 30px !important;
+  
+}
+.jqte {margin: 0px 0 !important;}
+  
+  </style>
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+
+        {{if .AlertX}}
+        <div class="alert alert-warning alert-dismissible fade show  mb-16 mt-16" role="alert">
+          <strong>{{.AlertX}}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        {{end}}
+
+<div class="row mb-16">
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      
+        
+        <div class="row">
+          <div class="col-sm-8"><h4 class="header-title mb-4">Ticked Details [<span class="support-status {{.SupportList.Status}}">{{.SupportList.Status}}</span>]</h6> </div>
+          <div class="col-sm-4 date-cell">{{.SupportList.Timestamp}}</div>
+          <div class="col-sm-12 border-bottom mb-16">Subject : {{.SupportList.Ticket_subject}}</div>
+          <div class="col-sm-12">{{.SupportList.Ticket_desc}}</div>
+
+        </div>
+       
+    </div>
+  </div>
+</div>
+</div>
+{{if .ReplyList}}
+<div class="row mb-16">
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+        <h4 class="header-title mb-4">Ticked Replied</h6> 
+     
+      {{range .ReplyList}}
+        {{if eq .Type "Merchant"}}
+            <div class="row bg-danger-subtle  mb-16 border rounded my-2 p-2" style="margin-right: 100px;">
+                <div class="col-sm-12 text-start fw-bold">Replied by {{.Reply_by}} on <span class="date-cell">{{.Timestamp}}</span></div>
+                <div class="col-sm-12">{{.Reply_desc}}</div>
+            </div>
+        {{else}}
+            <div class="row bg-success-subtle p-2 mb-16 border rounded my-2 p-2" style="margin-left: 100px;">
+                <div class="col-sm-12 text-start fw-bold">Replied by {{.Reply_by}} on <span class="date-cell">{{.Timestamp}}</span></div>
+                <div class="col-sm-12">{{.Reply_desc}}</div>
+            </div>
+        {{end}}
+
+      {{end}}
+
+    </div>
+  </div>
+</div>
+</div>
+{{end}}
+
+<div class="row mb-16">
+<div class="col-lg-12">
+<div class="card">
+  <div class="card-body">
+    <h4 class="header-title mb-4">Reply your Message</h6> 
+   
+    
+        
+              <form method="POST" action="/admin/post-support-ticket-reply" autocomplete="off">
+                <input type="hidden" name="ticket_id" value="{{.SupportList.Ticket_id}}">
+                <input type="hidden" name="client_id" value="{{.SupportList.Client_id}}">
+
+                <div class="row">
+        
+                  <div class="col-md-12 my-2">
+                    <div class="form-floating">
+                      <textarea name="reply_desc" class="form-control editor" required></textarea>
+                    </div>
+                  </div>
+                 
+                  <div class="col-md-12 my-2">
+                    <div class="form-floating">
+                  <button type="submit" class="btn btn-sm btn-primary btn  btn-primary  mt-1" name="submit" title="submit" value="submit">Submit</button>
+                </div>
+            </div>
+                </div>
+                
+              </form>
+    
+     
+
+  </div>
+</div>
+</div>
+</div>
+</div> 
+</div> 
+</div> 
+</div>
+
+  {{template "partials/admin-footer" .}}
+  <link rel="stylesheet" type="text/css" href="https://jqueryte.com/css/jquery-te.css"/>
+  <script src="https://jqueryte.com/js/jquery-te-1.4.0.min.js"></script>
+  <script>
+      $('.editor').jqte();
+      
+  </script>
+

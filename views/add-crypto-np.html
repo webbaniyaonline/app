@@ -1,0 +1,108 @@
+{{template "partials/header" .}}
+<style>
+    .account-pages {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+.account-pages .box {
+    max-width: 600px !important;
+    margin: 0 auto;
+}
+</style>
+
+
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}} </span></h4>
+          <div class="my-1">
+            {{if .Alert}}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <strong>{{.Alert}}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            {{end}} 
+            <div class="account-pages">
+                <div class="box">
+                    <div class="card form bg-secondary-subtle shadow">
+                        <div class="card-body">
+                <form method="POST" action="/add-crypto-post-np" autocomplete="off">
+                    <div class="row">
+                    
+                      <div class="col-md-12 my-2">
+                        <div class="form-floating">
+                          <select class="form-select" name="price_currency" id="price_currency" title="Price Currency" required="">
+                          <option value="" selected="selected">Select</option>
+                          <option value="usd">USD</option>
+                          <option value="eur">EUR</option>
+                          <option value="gbp">GBP</option>
+                          </select>
+                          <label for="price_currency">Select Price Currency</label>
+                          
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-12 my-2">
+                        <div class="form-floating">
+                          <input type="text" id="price_amount" name="price_amount" class="form-control" title="Amount" required=""  >
+                          <label for="price_amount">Amount</label>
+                        </div>
+                      </div>
+                 
+         
+                      <div class="col-md-12 my-2">
+                        <div class="form-floating">
+                          <select class="form-select w-100" name="pay_currency" id="pay_currency" title="Pay Currency" required="">
+                          <option value="" selected="selected">Select</option>
+                          <option value="btc" selected >BTC</option>
+                          </select>
+                          <label for="pay_currency">Pay Currency</label>
+                          
+                        </div>
+
+                        <div class="col-md-12 my-2">
+                            <div class="form-floating">
+                              <input type="text" id="order_description" name="order_description" class="form-control" title="Description" required="" >
+                              <label for="order_description">Description</label>
+                            </div>
+                          </div>
+                      
+
+        </div>
+                      
+                      
+                      
+                    </div>
+                    <button type="submit" id="submit" class="btn btn-outline-primary w-100 template loaderx" name="submit" title="submit" value="submit">Pay Now <i class="fa-solid fa-shield"></i></button>
+                  </form>
+                </div></div>
+
+                </div>
+             </div>     
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+<script>
+	// for open owner type radio button
+	$('input[type="radio"]').click(function(){
+        var inputValue = $(this).attr("value");
+		alert(inputValue);
+        var targetBox = $("." + inputValue);
+        $(".part").not(targetBox).hide();
+        $(targetBox).show();
+    });
+
+</script>
+  {{template "partials/footer" .}}
+
+

@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+
+postgres:
+image: postgres:17
+container_name: postgres
+restart: unless-stopped
+
+```
+environment:
+  POSTGRES_DB: golangdb
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres123
+
+ports:
+  - "5432:5432"
+
+volumes:
+  - postgres_data:/var/lib/postgresql/data
+
+healthcheck:
+  test: ["CMD-SHELL", "pg_isready -U postgres -d golangdb"]
+  interval: 10s
+  timeout: 5s
+  retries: 5
+```
+
+app:
+build:
+context: .
+dockerfile: Dockerfile
+
+```
+container_name: golang-app
+
+restart: unless-stopped
+
+depends_on:
+  postgres:
+    condition: service_healthy
+
+ports:
+  - "3000:3000"
+
+environment:
+  DB_HOST: postgres
+  DB_PORT: 5432
+  DB_USER: postgres
+  DB_PASSWORD: postgres123
+  DB_NAME: golangdb
+  DB_SSLMODE: disable
+
+volumes:
+  - ./uploads:/app/uploads
+  - ./logs:/app/logs
+```
+
+volumes:
+postgres_data:

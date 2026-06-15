@@ -1,0 +1,160 @@
+{{template "partials/admin-header" .}}
+<style>
+    .img-icon { width: 40px;margin-right: 10px;}
+    </style>
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+         
+
+          <div class="row">
+            <div class="col-lg-8">
+                <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{.Title}} - {{.Action}}</span></h4>
+            </div>
+            <div class="col-lg-4 text-end my-2"> {{if eq .Action "List"}}<a href="/admin/add-acquirer" title="Add Acquirer" class="btn btn-sm btn-outline-primary template"> Add Acquirer</a>{{end}}</div>
+      </div>
+  
+      {{if .AlertX}}
+      <div class="row mx-0">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{.AlertX}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+      {{end}}
+      {{if eq .Action "List"}}
+
+          <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0">
+              <thead >
+                <tr class="font-weight-bolder">
+                  
+                  <th scope="col">Acquirer</th>
+                  <th scope="col">Api Key</th>
+                  <th scope="col">Endpoint URL</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-end mx-2">Action</th>
+                </tr>
+              </thead>
+              <tbody id="none">
+                  {{range .AcquirerList}}
+                  <tr>
+                    <td class="text-capitalize">{{.Acquirer_title}}</td>
+                    <td>{{.Api_key}}</td>
+                    <td>{{.Endpoint_url}}</td>
+                    <td>{{if eq .Status 1}} <i class="fa-regular fa-circle-check text-success"></i> {{else}} <i class="fa-regular fa-circle-xmark text-danger"></i> {{end}}</td>
+                    <td class="text-end mx-2"><a class="text-dark mx-2" href="/admin/acquirer/edit/{{.Acquirer_id}}" title="EDIT COIN"><i class="fa-solid fa-pen-to-square"></i></a> <a class="text-danger mx-2" href="/admin/acquirer/delete/{{.Acquirer_id}}" title="DELETE COIN"><i class="fa-solid fa-trash"></i></a></td>
+                  </tr>
+                {{end}}
+                <tr>
+                  <td class="text-end mx-2 fs-6" colspan="5"> 
+                    <span class="mt-1 font-monospace mx-2 float-start" > Page [{{ .Page }}] Total {{ .Total }}  </span>
+                    {{ if gt .Page 1 }}
+                  &nbsp;<a href="?page={{ sub .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-left"></i></a>
+                   {{ end }}
+                  
+                   {{ if lt (mul .Page .Limit) .Total }}
+                   &nbsp;<a href="?page={{ add .Page 1 }}&limit={{ .Limit }}" class="mx-1 float-start btn btn-outline-primary btn-sm"><i class="fa-solid fa-angles-right"></i></a>
+                  {{ end }}
+
+
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+           
+          </div>
+
+      {{else}}
+    <!-- {{ if .EditData }} {{ .EditData.Acquirer_title }} {{ .EditData.Acquirer_title }} {{end}} -->
+      <form method="POST" action="/admin/AcquirerPost" autocomplete="off" >
+      <input type="hidden" name="tableID" value="{{if .EditData.Acquirer_id}}{{.EditData.Acquirer_id}}{{end}}">
+      <input type="hidden" name="mode" value="{{.Action}}">
+      
+        <div class="row">
+        
+         
+
+      
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="acquirer_title" name="acquirer_title" class="form-control" title="Acquirer" required="" value="{{if .EditData.Acquirer_title}}{{.EditData.Acquirer_title}}{{end}}">
+              <label for="acquirer_title">Acquirer</label>
+            </div>
+          </div>
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="api_key" name="api_key" class="form-control" title="Api Key" value="{{if .EditData.Api_key}}{{.EditData.Api_key}}{{end}}">
+              <label for="api_key">Api Key</label>
+            </div>
+          </div>
+        
+        <div class="col-md-6 my-2">
+          <div class="form-floating">
+            <input type="text" id="secret_key" name="secret_key" class="form-control" title="Secret Key" value="{{if .EditData.Secret_key}}{{.EditData.Secret_key}}{{end}}">
+            <label for="secret_key">Secret Key</label>
+          </div>
+        </div>
+
+        <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="endpoint_url" name="endpoint_url" class="form-control" title="Endpoint URL" value="{{if .EditData.Endpoint_url}}{{.EditData.Endpoint_url}}{{end}}">
+              <label for="endpoint_url">Endpoint URL</label>
+            </div>
+          </div>
+
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="callback_url" name="callback_url" class="form-control" title="Callback URL" value="{{if .EditData.Callback_url}}{{.EditData.Callback_url}}{{end}}">
+              <label for="callback_url">Callback URL</label>
+            </div>
+          </div>
+
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="success_url" name="success_url" class="form-control" title="Success URL" value="{{if .EditData.Success_url}}{{.EditData.Success_url}}{{end}}">
+              <label for="success_url">Success URL</label>
+            </div>
+          </div>
+
+          <div class="col-md-6 my-2">
+            <div class="form-floating">
+              <input type="text" id="failed_url" name="failed_url" class="form-control" title="Failed URL" value="{{if .EditData.Failed_url}}{{.EditData.Failed_url}}{{end}}">
+              <label for="failed_url">Failed URL</label>
+            </div>
+          </div>
+         
+          
+
+          <div class="col-md-2 my-2">
+            <div class="form-floating">
+              <select class="form-select" name="status" id="status" title="Status" required="">
+              <option value=1 {{ if eq .EditData.Status 1 }}selected{{end}}>Active</option>
+              <option value=2 {{ if eq .EditData.Status 2 }}selected{{end}}>Deleted</option>
+              </select>
+              <label for="status">Status</label>
+              
+            </div>
+          </div>
+          <div class="col-md-2 my-2">
+            <div class="form-floating">
+          <button type="submit" id="submit" class="btn btn-primary btn btn-lg btn-primary w-100 mt-1" name="submit" title="submit" value="submit">Submit</button>
+        </div>
+    </div>
+        </div>
+        
+      </form>
+      {{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</div> 
+</div>
+  {{template "partials/admin-footer" .}}

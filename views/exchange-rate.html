@@ -1,0 +1,107 @@
+{{template "partials/header" .}}
+{{.LoginHistory}}
+<div class="main-content">
+  <div class="page-content">
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title mb-4"> <span data-toggle="tooltip" data-placement="right"> {{ .Title }} </span></h4>
+
+          <form method="POST" action="/exchanGeneratePost" autocomplete="off">
+            <div class="row">
+              
+              <div class="col-sm-4 my-1">
+                <div class="form-floating">
+                  <select name="fromcurrency" id="fromcurrency" class="form-select bg-transparent">
+                      <option value="ADX">ADX</option>
+                      <option value="AFG">AFG</option>
+                      <option value="AIR">AIR</option>
+                      <option value="ALGO">ALGO</option>
+                      <option value="ARX">ARX</option>
+                      <option value="BTC">BTC</option>
+                      <option value="DOGE">DOGE</option>
+                      <option value="DSH">DSH</option>
+                      <option value="ETC">ETC</option>
+                      <option value="ETH">ETH</option>
+                      <option value="USD">USD</option>
+                      <option value="USDT">USDT</option>
+                      <option value="USDC">USDC</option>
+                      
+                    
+                  </select>
+                  <label for="amount">Crypto Currency From</label>
+                </div>
+              </div>
+              <div class="col-sm-4  my-1">
+                <div class="form-floating">
+                  <select name="tocurrency" id="tocurrency" class="form-select bg-transparent">
+                    <option value="">Select Currency To</option>
+                    <option value="AED">AED - United Arab Emirates dirham</option>
+                    <option value="ADX">ADX</option>
+                    <option value="AFG">AFG</option>
+                    <option value="AIR">AIR</option>
+                    <option value="ALGO">ALGO</option>
+                    <option value="ARX">ARX</option>
+                    <option value="BTC">BTC</option>
+                    <option value="DOGE">DOGE</option>
+                    <option value="DSH">DSH</option>
+                    <option value="ETC">ETC</option>
+                    <option value="ETH">ETH</option>
+                    <option value="USD">USD</option>
+                    <option value="USDT">USDT</option>
+                    <option value="USDC">USDC</option>
+                  </select>
+                  <label for="tocurrency">Crypto Currency To</label>
+                </div>
+              </div>
+              <div class="col-sm-4  my-1">
+                <button type="submit" class="btn btn-primary w-100 h-100 getexchange">Convert</button>
+              </div>
+              <div class="col-sm-12 my-1 fw-bold text-center btn btn-outline-warning" id="currresult" style="display:none;"></div>
+          
+  
+            </div>
+          </form>
+          {{if .AssetIDBase}}
+<div class="text-center fs-4 text-bg-success my-4 rounded">{{.AssetIDBase}} To  {{.AssetIDQuote}} :: {{.Rates}}</div>
+{{end}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+</div>
+</div>
+</div>
+  {{template "partials/footer" .}}
+  <script>
+    $('.getexchange').click(function(){
+      //alert(12345);
+         var curramt=$('#curramt').val();
+         var fromcurrency=$('#fromcurrency').val();
+         var tocurrency=$('#tocurrency').val();
+         
+         if(curramt==''){
+            alert('Please enter amount');
+          $('#curramt').focus();
+          return false;
+        }else if(fromcurrency==''){
+            alert('Please select from currency');
+          $('#fromcurrency').focus();
+          return false;
+        }else if(tocurrency==''){
+            alert('Please select to currency');
+          $('#tocurrency').focus();
+          return false;
+        }
+        
+       
+   });
+        
+   
+    </script>

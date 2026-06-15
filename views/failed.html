@@ -1,0 +1,51 @@
+{{template "partials/support-files" .}}
+
+<section class="auth bg-base flex-wrap">  
+
+<div class="card">
+ 
+  <div class="card-body py-80">
+    <div class="row justify-content-center" id="invoice">
+      <div class="col-lg-4"><div class="col-xxl-12 col-sm-12">
+        <div class="pricing-plan featured-item position-relative  overflow-hidden border  z-1 shadow p-3 mb-5 bg-body-tertiary text-secondary rounded">
+          <div class="text-center">
+            <img src="/assets/images/failed1.png"  alt="" class="position-absolutetop-10">
+          </div>
+            
+            <p class="mb-16 text-center text-danger fs-4 fw-bold">Failure to pay</p>
+            <p class="my-2  text-center fw-medium  text-bold fs-5">Order amount : <span class="text-uppercase">{{.TransData.Convertedcurrency}} {{.TransData.Convertedamount}}</span> </p>
+            <p class="my-2 text-center mb-24"><span class="fw-sm">Payment failed, please try again</span> </p>
+           
+
+
+{{if .RedirectURL}}<h6 class="mb-24  text-center fs-6"> Redirecting in <span id="timer">10</span> seconds...</h6>{{end}}
+            <div class=" px-12 pb-10 text-center">Powered by <img src="{{.LogoDark}}" alt="Logo" class="img-fluid img bg-light p-0 rounded px-1" style="max-height: 20px;"></div>
+            
+        </div>
+        
+    </div></div>
+
+
+    </div>
+  </div>
+</div>
+</section>
+{{if .RedirectURL}}
+<script src="{{.CssURLS}}/assets/js/lib/jquery-3.7.1.min.js"></script>
+<script type="text/javascript">
+
+  let countdown = 10; // countdown starting at 10 seconds
+            const targetUrl = "{{.RedirectURL}}"; // replace with your target URL
+
+            const timerInterval = setInterval(function() {
+                countdown--;
+                $("#timer").text(countdown);
+
+                if (countdown <= 0) {
+                    clearInterval(timerInterval); // stop the timer
+                    window.location.href = targetUrl; // redirect to the target URL
+                }
+            }, 1000); // update every second
+       
+</script>
+{{end}}
