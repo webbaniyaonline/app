@@ -68,6 +68,7 @@ func main() {
 		ExposeHeaders:    "",
 		MaxAge:           0,
 	}))
+
 	app.Static("/views", "./views") // allow folder for get public files like js/css etc
 
 	// Serve static files from the "static" directory with MIME type
